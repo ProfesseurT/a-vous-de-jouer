@@ -76,3 +76,17 @@
 - Code mort retiré (alias, variables et caches inutilisés).
 
 **Vérifié** : rendu identique sur captures (ordinateur, téléphone portrait et paysage, tablette), aucune erreur console, gestes et boutons OK, équilibrage inchangé (robot).
+
+## 21/11/2026 · Retour de Teddy : les ennemis arrivent de trop loin
+
+**Fait** : apparition à 32 m devant le vigneron au lieu de 56 m (environ 3 s pour réagir au lieu de 5,5 s), petite animation d'apparition, tutoriel recalé sur la distance d'arrivée.
+
+**Test (robot, réaction humaine 0,25 s, saut anticipé, 6 parties par case)**
+| Mission | Avant, joueur attentif / moyen | Après, joueur attentif / moyen |
+|---|---|---|
+| 1 | 6/6, 6/6 (0 coup) | 6/6, 6/6 (0 à 1 coup) |
+| 2 | 6/6, 6/6 | 5/6, 4/6 (3 à 4 coups) |
+| 3 | 6/6, 6/6 | 5/6, 6/6 (étoiles de retard proches de 4) |
+| 4 | 6/6, 2/6 | 4/6, 3/6 |
+
+Verdict : avant, trop facile, ce qui confirme le ressenti de Teddy. Après, la mission 1 reste un tutoriel, puis ça se tend en restant gagnable.

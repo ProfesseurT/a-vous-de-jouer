@@ -322,7 +322,8 @@ const QUIPS = [
    MOTEUR : constantes, utilitaires
    ===================================================================== */
 let W = 256, H = 224, HZ = 84, CAM = 3.0, ZB = 2.7, ZPL = 32; // écran interne : 256 x 224 sur ordinateur, adapté à l'écran sur téléphone
-const FOC = 140, PZ = 8, LW = 2.4, SPAWN_Z = 64, SP = 1.1;
+const FOC = 140, PZ = 8, LW = 2.4, SP = 1.1;
+let SPAWN_Z = 40; // les obligations surgissent à 32 m devant le vigneron (environ 3 s pour réagir)
 const KPZ = FOC / PZ; // pixels par mètre à la profondeur du joueur (17,5)
 const LANE_X = i => (i - 2) * LW;
 const ROWS = []; for (let k = -6; k <= 5; k++) ROWS.push((k + 0.5) * LW);
@@ -1058,38 +1059,41 @@ function startMission(mi){
   resetPlayer();
   if (PAL !== PALS[m.pal]) buildScene(m.pal);
   G.script = buildScript(mi);
-  G.nextSpawn = (mi === 0 ? 120 : 45) + SPAWN_Z;
+  G.nextSpawn = (mi === 0 ? 176 : 101) + PZ; // distance où arrive la première vague, après le tutoriel
   SND.play('main');
   updatePadUI();
 }
 function buildScript(mi){
   const s = [], touch = G.coarse, phone = G.phone;
   const hint = (at, txt, dur) => s.push({ at, fn:() => showSub(txt, dur || 3.4) });
-  const ent = (at, type, lane, extra) => s.push({ at, fn:() => spawnEnt(type, lane === 'p' ? G.p.lane : lane, G.dist + SPAWN_Z, extra) });
+  // un ennemi est décrit par la distance où il ATTEINT le vigneron : le tutoriel reste juste quelle que soit SPAWN_Z
+  const T = SPAWN_Z - PZ, at = arr => Math.max(0, arr - T);
+  const ent = (arr, type, lane, extra) => s.push({ at:at(arr), fn:() => spawnEnt(type, lane === 'p' ? G.p.lane : lane, G.dist + SPAWN_Z, extra) });
+  const wall = arr => s.push({ at:at(arr), fn:() => { const gap = irand(0, 4); for (let l = 0; l < 5; l++) if (l !== gap) spawnEnt('norme', l, G.dist + SPAWN_Z); } });
   if (mi === 0){
     hint(4, touch ? 'GLISSEZ {p}← →{/} POUR SAUTER D\'UN RANG À L\'AUTRE.' : '{p}← →{/} : SAUTEZ D\'UN RANG À L\'AUTRE.');
-    ent(14, 'pile', 'p');
+    ent(70, 'pile', 'p');
     hint(52, touch ? 'GLISSEZ VERS LE HAUT POUR SAUTER LE DOSSIER.' : '{o}↑{/} OU {o}ESPACE{/} : SAUTEZ PAR-DESSUS LE DOSSIER.');
-    ent(60, 'label', 2);
+    ent(116, 'label', 2);
     hint(98, 'UNE {p}ÉTIQUETTE{/} ! LE TIR EST AUTO : VISEZ AVEC VOTRE RANG.');
-    ent(80, 'label', 0); ent(84, 'label', 4);
+    ent(136, 'label', 0); ent(140, 'label', 4);
     hint(122, 'LES ROSES NE CRAIGNENT QUE {p}VITICODE{/}. NE LES LAISSEZ PAS PASSER.');
   } else if (mi === 1){
-    ent(8, 'drm', 'p');
+    ent(64, 'drm', 'p');
     hint(14, phone ? 'NOUVEAU : {o}VITISOFT{/}, CHOISI TOUT SEUL CONTRE LES ENNEMIS ORANGE.' : 'NOUVEAU : {o}VITISOFT{/}. ' + (touch ? 'BOUTON VITISOFT' : 'TOUCHE {o}2{/}') + ' POUR LES ENNEMIS ORANGE.', 4);
-    s.push({ at:30, fn:() => { const gap = irand(0, 4); for (let l = 0; l < 5; l++) if (l !== gap) spawnEnt('norme', l, G.dist + SPAWN_Z); } });
+    wall(86);
     hint(70, 'UNE {r}NORME{/} NE SE SAUTE PAS : TROUVEZ LE PASSAGE.');
     hint(110, 'DAE, DSA, DAES : UN DOCUMENT PAR ENVOI, TOUT SUR {o}GAMMA 2{/}.', 3.6);
   } else if (mi === 2){
-    ent(6, 'bureau', 'p');
+    ent(62, 'bureau', 'p');
     hint(12, phone ? 'NOUVEAU : {w}LE BUREAU{/}. GLISSEZ VERS LE BAS : IL RANGE TOUT L\'ÉCRAN.' : 'NOUVEAU : {w}LE BUREAU{/}. ' + (touch ? 'BOUTON LE BUREAU' : 'TOUCHE {w}B{/}') + ' : RANGE TOUT L\'ÉCRAN.', 4);
-    s.push({ at:26, fn:() => swarm(G.dist + SPAWN_Z) });
-    hint(46, 'LES {o}FACTURES{/} VOLENT EN BANDE : {o}VITISOFT{/} LES ÉMET EN FACTUR-X.');
+    s.push({ at:at(82), fn:() => swarm(G.dist + SPAWN_Z) });
+    hint(56, 'LES {o}FACTURES{/} VOLENT EN BANDE : {o}VITISOFT{/} LES ÉMET EN FACTUR-X.');
     hint(96, 'LA {o}TVA{/} ? {o}VITISOFT{/} EXPORTE VOS ÉCRITURES VERS VOTRE COMPTABLE.', 3.8);
   } else if (mi === 3){
-    ent(8, 'carnet', 'p');
+    ent(64, 'carnet', 'p');
     hint(14, phone ? 'NOUVEAU : {c}REGISTRE PHYTO{/}, CHOISI TOUT SEUL CONTRE LES ENNEMIS CYAN.' : 'NOUVEAU : {c}REGISTRE PHYTO{/}. ' + (touch ? 'BOUTON REGISTRE' : 'TOUCHE {c}3{/}') + ' POUR LES ENNEMIS CYAN.', 4);
-    ent(40, 'stat', 1);
+    ent(96, 'stat', 1);
     hint(66, '{c}STAT\'PHYTO{/} VOUS SUIT : ELLE DEVIENT ANNUELLE EN 2028.', 3.6);
   }
   return s.sort((a, b) => a.at - b.at);
@@ -1099,7 +1103,7 @@ function buildScript(mi){
 function spawnEnt(type, lane, wz, extra){
   const d = ET[type]; const spr = SPR[d.spr][0];
   const e = { type, d, x:LANE_X(lane), bx:LANE_X(lane), wz, y:d.y || 0, yo:0, hp:d.hp || 1, fam:d.fam, sprName:d.spr,
-    t:Math.random() * 10, ph:Math.random() * 6, flash:0, dead:false, passed:false, touched:false, hopT:rand(0.6, 1.4), hopA:1, fromX:0, toX:0,
+    t:Math.random() * 10, ph:Math.random() * 6, born:G.rt, flash:0, dead:false, passed:false, touched:false, hopT:rand(0.6, 1.4), hopA:1, fromX:0, toX:0,
     hgt:(spr.height - 2) / KPZ };
   if (extra) Object.assign(e, extra);
   G.ents.push(e); return e;
@@ -1486,8 +1490,8 @@ function drawPlantsAt(i, Z){
 const dyn = [], dynPool = [], byDepth = (a, b) => b.z - a.z;
 function pushDyn(z, k, o){ let it = dynPool[dyn.length]; if (!it) it = dynPool[dyn.length] = { z:0, k:0, o:null }; it.z = z; it.k = k; it.o = o; dyn.push(it); }
 function drawDyn(it){ const k = it.k; if (k === 1) drawEnt(it.o, it.z); else if (k === 2) drawShot(it.o, it.z); else if (k === 3) drawPart(it.o, it.z); else if (k === 4) drawPlayer(); else drawBoss(it.z); }
-function drawSprite(cv, x, y, Z, nomZ){
-  const s = nomZ / Z; proj(x, y, Z);
+function drawSprite(cv, x, y, Z, nomZ, grow){
+  const s = nomZ / Z * (grow || 1); proj(x, y, Z);
   const w = Math.max(1, Math.round(cv.width * s)), h = Math.max(1, Math.round(cv.height * s));
   ctx.drawImage(cv, Math.round(PX - w / 2), Math.round(PY - h), w, h);
   return w;
@@ -1495,7 +1499,8 @@ function drawSprite(cv, x, y, Z, nomZ){
 function drawEnt(e, Z){
   const frames = (e.flash > 0 ? SPRW : SPR)[e.sprName]; const spr = frames[Math.floor(e.t * 6) % frames.length];
   if (e.y + e.yo > 0.25){ proj(e.x, 0, Z); const sw = Math.max(1, Math.round(spr.width * PZ / Z * 0.6)); ctx.fillStyle = 'rgba(8,2,18,.45)'; ctx.fillRect(Math.round(PX - sw / 2), Math.round(PY - 1), sw, Math.max(1, Math.round(2 * PZ / Z))); }
-  drawSprite(spr, e.x, e.y + e.yo, Z, PZ);
+  const age = G.rt - e.born;
+  drawSprite(spr, e.x, e.y + e.yo, Z, PZ, age < 0.25 ? 0.35 + age * 2.6 : 1);
 }
 function drawShot(s, Z){ drawSprite(SPR.shot[s.w], s.x, s.y, Z, PZ); }
 function drawPart(q, Z){ proj(q.x, q.y, Z); const sz = Math.max(1, Math.round(q.s * PK / KPZ * 1.2)); ctx.fillStyle = q.col; ctx.fillRect(Math.round(PX), Math.round(PY), sz, sz); }
@@ -1834,6 +1839,7 @@ fitAll(); updatePadUI(); refreshTitle(); fillPromo(); $('app').inert = true;
 requestAnimationFrame(frame);
 window.AVDJ = { G, MISSIONS, FAM, startMission, showBrief, startBoss, gameOver, victory, hop, jump, setWeapon, useBomb,
   step(n){ for (let i = 0; i < n; i++){ G.rt += STEP; if (G.state === 'play') play(STEP); else break; } },
+  spawnAt(z){ SPAWN_Z = z; },
   bench(n){ const t0 = performance.now(); for (let i = 0; i < n; i++){ G.rt += STEP; if (G.state === 'play') play(STEP); render(); } return (performance.now() - t0) / n; } }; // banc de test (QA)
 })();
 </script>
