@@ -34,9 +34,14 @@ const head = html(src.slice(0, style.a));
 const body = html(src.slice(style.b, script.a));
 const fragment = `${head}<style>${css}</style>${body}<script>${js}</script>\n`;
 
+const PUBLIC = 'https://professeurt.github.io/a-vous-de-jouer/';
 const og = '<meta property="og:title" content="À vous de jouer">'
   + '<meta property="og:description" content="Vigneron ou vigneronne, quatre obligations, des logiciels en guise d\'armes. Le jeu 16 bits de l\'équipe Solumatic.">'
-  + '<meta property="og:type" content="website">';
+  + '<meta property="og:type" content="website"><meta property="og:locale" content="fr_FR">'
+  + `<meta property="og:url" content="${PUBLIC}"><link rel="canonical" href="${PUBLIC}">`
+  + `<meta property="og:image" content="${PUBLIC}og.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">`
+  + '<meta property="og:image:alt" content="Écran d\'accueil du jeu À vous de jouer : vigneron ou vigneronne dans les rangs de vigne au coucher du soleil.">'
+  + '<meta name="twitter:card" content="summary_large_image">';
 const page = '<!doctype html><html lang="fr"><head><meta charset="utf-8">'
   + '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">'
   + `${head}${og}<style>${css}</style></head><body>${body}<script>${js}</script></body></html>\n`;

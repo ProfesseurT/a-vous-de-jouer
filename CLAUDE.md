@@ -13,6 +13,7 @@ But business : faire parler de la prévente du registre phyto et amener des vign
 | `dist/jeu.html` | Généré : fragment minifié publié en Artifact (non versionné). |
 | `scripts/build.mjs` | Minifie (esbuild), construit les deux fichiers, refuse tout tiret cadratin ou demi-cadratin. |
 | `JOURNAL.md` | Décisions, vérifications, état. |
+| `og.jpg` | Image d'aperçu quand le lien est partagé (LinkedIn, etc.). |
 
 Première fois : `npm install`. Après toute modification de `src/jeu.html` : `npm run build`.
 
@@ -37,6 +38,6 @@ Première fois : `npm install`. Après toute modification de `src/jeu.html` : `n
 - Apparition des obligations à 32 m devant le vigneron (`SPAWN_Z = 40`, environ 3 s pour réagir) : retour de Teddy du 21/11, à 56 m le jeu était trop facile. Le tutoriel est décrit en distance d'arrivée, il suit tout seul ce réglage.
 - Étoiles de retard : chaque obligation qui passe ajoute une étoile (une seule par nuée). À 5, « contrôle » : une grappe de sérénité en moins et les étoiles repartent à zéro (retour de Teddy du 21/11 : perdre la partie à 5 étoiles était trop dur, on ne peut pas tout attraper). 3 éliminations ou 6 s sans faute retirent une étoile. On ne perd que par la sérénité.
 - Textes et dates : objets `WEAPONS`, `MISSIONS`, `BOMB_INFO`, `QUIPS` en haut du script.
-- Lien de prévente : `LP_URL`. Adresse publique du jeu pour le partage : `PUBLIC_URL` (à renseigner au déploiement).
+- Lien de prévente : `LP_URL`. Adresse publique du jeu : https://professeurt.github.io/a-vous-de-jouer/ (GitHub Pages, branche `main`, racine ; `PUBLIC_URL` dans le jeu, `PUBLIC` dans `scripts/build.mjs`). Chaque push sur `main` met le jeu en ligne. `og.jpg` = image d'aperçu des partages (1200 x 630, capture de l'accueil) : à refaire si l'accueil change. `.nojekyll` : GitHub sert les fichiers tels quels.
 - Banc de test : `window.AVDJ` (`step(n)` simule sans affichage, `bench(n)` mesure le coût d'une image).
 - Performance (à préserver) : sol écrit pixel par pixel dans un tampon puis `putImageData` ; ceps rangés sur un atlas ; textes rendus une fois en petites images ; aucune allocation dans la boucle (tableaux compactés sur place, liste de profondeur réutilisée) ; plus aucun calcul derrière un écran opaque ; musique non programmée quand le son est coupé.

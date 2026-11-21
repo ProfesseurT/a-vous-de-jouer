@@ -122,3 +122,12 @@ Mesure après changement (bot, 8 parties par ligne) :
 Le bot qui chasse tout garde les mêmes résultats qu'avant (il perd surtout par les chocs). La mission 4 reste la plus dure, c'est voulu.
 
 Corrigés au passage (défauts d'affichage vus en testant) : sous-titres qui débordaient de l'écran sur téléphone en portrait, et texte sous les bandeaux (BOSS, CONTRÔLE, etc.) peu lisible sur les vignes, maintenant entouré d'un contour sombre.
+
+## 21/11/2026 · Mise en ligne publique sur GitHub Pages
+
+Choix de Teddy : GitHub Pages. Dépôt renommé `a-vous-de-jouer` (l'ancien nom `-vous-de-jouer` avait perdu le « À »), public.
+
+- Adresse : https://professeurt.github.io/a-vous-de-jouer/ (branche `main`, racine). Chaque push sur `main` met à jour le jeu en ligne.
+- `PUBLIC_URL` renseignée : le bouton de partage met ce lien dans le texte, y compris depuis l'Artifact.
+- Aperçu de partage : balises Open Graph et Twitter (titre, description, image `og.jpg` 1200 x 630, adresse canonique).
+- `.nojekyll` : pas de traitement Jekyll, les fichiers sont servis tels quels.
