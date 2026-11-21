@@ -44,6 +44,8 @@ const og = '<meta property="og:title" content="À vous de jouer">'
   + '<meta name="twitter:card" content="summary_large_image">';
 const page = '<!doctype html><html lang="fr"><head><meta charset="utf-8">'
   + '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">'
+  // icône d'onglet : une grappe en pixels (évite aussi la requête favicon.ico en 404)
+  + '<link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 8 8%27 shape-rendering=%27crispEdges%27><path fill=%27%236fcf5a%27 d=%27M4 0h2v1H4z%27/><path fill=%27%239a2cb0%27 d=%27M2 1h4v1H2zM1 2h6v2H1zM2 4h4v2H2zM3 6h2v1H3z%27/><path fill=%27%23ff9ac8%27 d=%27M2 2h1v1H2zM4 3h1v1H4zM3 5h1v1H3z%27/></svg>">'
   + `${head}${og}<style>${css}</style></head><body>${body}<script>${js}</script></body></html>\n`;
 
 await mkdir(join(root, 'dist'), { recursive: true });
