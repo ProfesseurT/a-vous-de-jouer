@@ -25,7 +25,7 @@ Première fois : `npm install`. Après toute modification de `src/jeu.html` : `n
 - « 3 500 comptes Viticode » et « 2 000 domaines chez Vitisoft » : jamais additionnés.
 - Étiquetage : c'est l'information qui est obligatoire, pas le QR code.
 - On dit « les douanes ». Hors UE, c'est un DAE (pas un DAES). DAE et DSA sont deux régimes différents.
-- Vitisoft calcule la DRM (validée dans CIEL), génère DAE et DAES sur GAMMA 2, produit les factures en Factur-X, exporte factures et encaissements (comptes de TVA compris) vers le logiciel du comptable. Il ne transmet pas la DRM, ne déclare pas la TVA, ne tient pas la comptabilité, ne reçoit pas les factures fournisseurs.
+- Vitisoft calcule la DRM (validée dans CIEL), génère DAE et DAES sur GAMMA 2, produit les factures en Factur-X. Il est connecté à Pennylane, plateforme agréée, qui transporte les factures électroniques (Pennylane ne fait jamais la facture). Il envoie le journal des ventes, TVA comprise, dans le logiciel du comptable (arbitrage de Teddy du 21/11/2026 : « TVA mensuelle » validée). Il ne transmet pas la DRM et ne tient pas la comptabilité.
 - Téléphone d'abord : plein écran, gestes, aucun bouton.
 - Le bureau : ni prix, ni date, ni « IA ».
 - Teddy pousse lui-même sur git ; rien n'est publié publiquement sans son accord.

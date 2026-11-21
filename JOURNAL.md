@@ -131,3 +131,11 @@ Choix de Teddy : GitHub Pages. Dépôt renommé `a-vous-de-jouer` (l'ancien nom 
 - `PUBLIC_URL` renseignée : le bouton de partage met ce lien dans le texte, y compris depuis l'Artifact.
 - Aperçu de partage : balises Open Graph et Twitter (titre, description, image `og.jpg` 1200 x 630, adresse canonique).
 - `.nojekyll` : pas de traitement Jekyll, les fichiers sont servis tels quels.
+
+## 21/11/2026 · Arbitrages de Teddy : plateforme agréée et TVA
+
+Les deux écarts signalés plus haut sont tranchés par Teddy :
+- **Plateforme agréée** : Vitisoft est connecté à la plateforme agréée Pennylane pour la facture électronique (« c'est certain »). La FAQ de vitisoft.fr (« se connecte aux PA ») est donc juste. C'est cohérent avec `REGLES_COPIE_EMAILS.md` (section 5) : Vitisoft produit la facture, Pennylane la transporte. Pennylane annonce son immatriculation définitive comme plateforme agréée en décembre 2025 (fiche pennylane.com « liste des PDP », non recoupée avec la liste officielle de la DGFiP).
+- **TVA mensuelle** : validée par Teddy, parce que la TVA part dans le journal des ventes sur tous les logiciels comptables. La pub Meta peut garder « Valider la TVA mensuelle ».
+
+Textes du jeu mis à jour (mission 3) : consigne de mission (« transmises par Pennylane, plateforme agréée », « votre journal des ventes, TVA comprise, part tout seul dans le logiciel de votre comptable »), indice en jeu sur la TVA, SMS du cabinet. Pas de « TVA du mois » dans le jeu : la fiche de mission rappelle que le régime simplifié agricole, c'est une déclaration par an et quatre acomptes.

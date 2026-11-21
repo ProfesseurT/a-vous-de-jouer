@@ -79,6 +79,8 @@ body{margin:0;background:var(--ink);color:var(--text);font-family:var(--body);ov
   font:700 17px/1.2 var(--body);padding:15px 36px;text-decoration:none;cursor:pointer;letter-spacing:.01em;
   box-shadow:0 0 24px rgba(255,61,139,.35)}
 .btn-main:hover{background:#d9531a}
+/* écran trop court (petit téléphone) : le bouton principal reste visible en bas pendant qu'on fait défiler */
+.ov .btn-main{position:sticky;bottom:max(12px,env(safe-area-inset-bottom));z-index:1}
 .btn-ghost{appearance:none;background:transparent;border:1px solid rgba(255,122,176,.55);border-radius:8px;color:var(--text);
   font:700 14px/1.2 var(--body);padding:11px 18px;cursor:pointer}
 .btn-ghost:hover{border-color:var(--pink-soft);color:#fff}
@@ -306,9 +308,9 @@ const MISSIONS = [
     mix:[['facture',3],['tva',3],['xml',2],['drm',1],['daes',1],['label',2]],
     fact:"La TVA au régime simplifié agricole : une déclaration par an et quatre acomptes, en ligne. Depuis le 1er septembre 2026, il faut pouvoir recevoir ses factures en électronique. Le 1er septembre 2027, TPE et PME devront les émettre et déclarer leurs ventes aux particuliers et à l'étranger (e-reporting).",
     unlock:{ bomb:true },
-    tip:'Factures et TVA en orange : <b style="color:#ffb27a">Vitisoft</b> produit vos factures en Factur-X et exporte factures et encaissements, comptes de TVA compris, vers le logiciel de votre comptable. Débordé ? Lâchez <b>le bureau</b> {{B}}.',
+    tip:'Factures et TVA en orange : <b style="color:#ffb27a">Vitisoft</b> produit vos factures en Factur-X, transmises par Pennylane, plateforme agréée. Votre journal des ventes, TVA comprise, part tout seul dans le logiciel de votre comptable. Débordé ? Lâchez <b>le bureau</b> {{B}}.',
     radio:'RADIO RANG FM · VENDANGES DE NUIT',
-    sms:[["LA COMPTA","Tes factures partent bien en Factur-X ?"],["LE CABINET","J'attends ton export des ventes pour la TVA."],["SOLUMATIC","Une question ? 02 47 50 38 22"]] },
+    sms:[["LA COMPTA","Tes factures partent bien en Factur-X ?"],["LE CABINET","Ton journal des ventes est arrivé, TVA comprise."],["SOLUMATIC","Une question ? 02 47 50 38 22"]] },
   { short:'LE REGISTRE', title:'Le registre phyto', date:'1er janvier 2027', pal:'dawn', length:700,
     speed:[10, 12], gap:[11.5, 7.5], walls:true, swarm:true,
     mix:[['carnet',4],['stat',2],['classeur',1],['tva',1],['drm',1],['label',1]],
@@ -1106,7 +1108,7 @@ function buildScript(mi){
     hint(12, phone ? 'NOUVEAU : {w}LE BUREAU{/}. GLISSEZ VERS LE BAS : IL RANGE TOUT L\'ÉCRAN.' : 'NOUVEAU : {w}LE BUREAU{/}. ' + (touch ? 'BOUTON LE BUREAU' : 'TOUCHE {w}B{/}') + ' : RANGE TOUT L\'ÉCRAN.', 4);
     s.push({ at:at(82), fn:() => swarm(G.dist + SPAWN_Z) });
     hint(56, 'LES {o}FACTURES{/} VOLENT EN BANDE : {o}VITISOFT{/} LES ÉMET EN FACTUR-X.');
-    hint(96, 'LA {o}TVA{/} ? {o}VITISOFT{/} EXPORTE VOS ÉCRITURES VERS VOTRE COMPTABLE.', 3.8);
+    hint(96, 'LA {o}TVA{/} ? {o}VITISOFT{/} L\'ENVOIE DANS LE JOURNAL DES VENTES DE VOTRE COMPTABLE.', 3.8);
   } else if (mi === 3){
     ent(64, 'carnet', 'p');
     hint(14, phone ? 'NOUVEAU : {c}REGISTRE PHYTO{/}, CHOISI TOUT SEUL CONTRE LES ENNEMIS CYAN.' : 'NOUVEAU : {c}REGISTRE PHYTO{/}. ' + (touch ? 'BOUTON REGISTRE' : 'TOUCHE {c}3{/}') + ' POUR LES ENNEMIS CYAN.', 4);
