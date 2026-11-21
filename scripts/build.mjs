@@ -35,7 +35,7 @@ const body = html(src.slice(style.b, script.a));
 const fragment = `${head}<style>${css}</style>${body}<script>${js}</script>\n`;
 
 const og = '<meta property="og:title" content="À vous de jouer">'
-  + '<meta property="og:description" content="Un vigneron, quatre obligations, des logiciels en guise d\'armes. Le jeu 16 bits de l\'équipe Solumatic.">'
+  + '<meta property="og:description" content="Vigneron ou vigneronne, quatre obligations, des logiciels en guise d\'armes. Le jeu 16 bits de l\'équipe Solumatic.">'
   + '<meta property="og:type" content="website">';
 const page = '<!doctype html><html lang="fr"><head><meta charset="utf-8">'
   + '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">'

@@ -32,6 +32,7 @@ Première fois : `npm install`. Après toute modification de `src/jeu.html` : `n
 ## Conception (pour reprendre le code)
 
 - Écran interne 256 x 224 sur ordinateur et tablette ; sur téléphone, adapté à la forme de l'écran pour le remplir (`setRes`), sans boutons, aux gestes, outil choisi tout seul (`autoWeapon`). Agrandi sans lissage. Vue pseudo-3D : 5 allées (`LANE_X`), rangs de vigne entre elles, caméra à 3 m, joueur à 8 m devant (`PZ`).
+- Personnage au choix sur l'accueil : vigneron ou vigneronne (`SPR.heroes`, choix mémorisé dans le navigateur). Textes neutres ou accordés : jamais « le vigneron » seul.
 - Une couleur = un outil : rose Viticode, orange Vitisoft, cyan Registre phyto, blanc n'importe lequel. Le bureau = bombe qui range l'écran.
 - Apparition des obligations à 32 m devant le vigneron (`SPAWN_Z = 40`, environ 3 s pour réagir) : retour de Teddy du 21/11, à 56 m le jeu était trop facile. Le tutoriel est décrit en distance d'arrivée, il suit tout seul ce réglage.
 - Étoiles de retard : chaque obligation qui passe ajoute une étoile (une seule par nuée), 5 = perdu ; 5 éliminations ou 9 s sans faute en retirent une.

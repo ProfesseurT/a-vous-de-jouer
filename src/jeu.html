@@ -1,5 +1,5 @@
 <title>À vous de jouer</title>
-<meta name="description" content="Le jeu 16 bits du vigneron face à la paperasse : étiquetage, douane, facture électronique, registre phyto. Par l'équipe Solumatic.">
+<meta name="description" content="Le jeu 16 bits des vignerons et vigneronnes face à la paperasse : étiquetage, douanes, fisc, registre phyto. Par l'équipe Solumatic.">
 <meta name="theme-color" content="#12051f">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -84,6 +84,13 @@ body{margin:0;background:var(--ink);color:var(--text);font-family:var(--body);ov
 .btn-ghost:hover{border-color:var(--pink-soft);color:#fff}
 .btn-main:focus-visible,.btn-ghost:focus-visible,.pbtn:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
 .row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.pick{display:flex;gap:10px;justify-content:center}
+.hero{appearance:none;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:112px;padding:10px 14px 9px;border-radius:10px;cursor:pointer;
+  border:2px solid rgba(255,122,176,.3);background:rgba(33,16,58,.78);color:var(--lav);font:700 14px/1.2 var(--body)}
+.hero img{width:32px;height:56px;image-rendering:pixelated;opacity:.6}
+.hero[aria-pressed="true"]{border-color:var(--orange-soft);background:var(--badge);color:#fff;box-shadow:0 0 18px rgba(255,154,90,.35)}
+.hero[aria-pressed="true"] img{opacity:1}
+.hero:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
 .chip{display:inline-block;background:var(--badge);border:1px solid var(--pink-soft);border-radius:8px;padding:7px 14px;
   font-size:11px;line-height:1.4;letter-spacing:1.5px;color:#ffd1e4;font-weight:700;text-transform:uppercase}
 .small{margin:0;font-size:13px;line-height:1.5;color:var(--lav)}
@@ -148,7 +155,11 @@ textarea.share{width:100%;box-sizing:border-box;min-height:84px;background:var(-
   <div class="card">
     <p class="eyebrow">Le jeu · Édition campagne 2027</p>
     <h1 class="logo"><span>À vous de</span><span>jouer.</span></h1>
-    <p class="lede">Un vigneron, quatre obligations, et des logiciels en guise d'armes. <strong>Sautez d'un rang à l'autre et survivez à la paperasse</strong> jusqu'au 1er janvier 2027.</p>
+    <p class="lede">Vigneron ou vigneronne, quatre obligations, et des logiciels en guise d'armes. <strong>Sautez d'un rang à l'autre et survivez à la paperasse</strong> jusqu'au 1er janvier 2027.</p>
+    <div class="pick" role="group" aria-label="Votre personnage">
+      <button class="hero" data-hero="m" type="button" aria-pressed="true"><img alt="">Vigneron</button>
+      <button class="hero" data-hero="f" type="button" aria-pressed="false"><img alt="">Vigneronne</button>
+    </div>
     <button class="btn-main" id="btn-play" type="button">Jouer</button>
     <div class="row">
       <button class="btn-ghost" id="btn-help" type="button">Commandes</button>
@@ -630,9 +641,11 @@ function batMonster(pw, ph, o, f){
 function frames2(fn){ return [fn(0), fn(1)]; }
 
 /* Joueur : vu de dos, casquette rose, gilet orange, jean. */
-const PPAL = { k:P.ink, C:'#ff3d8b', c:'#b3175c', h:'#3a1530', S:'#c97a5a', s:'#f0a77f', v:'#ff7a2f', w:'#efe4fa', j:'#4b4fd6', J:'#3436a0', b:'#2a1020' };
+const PPAL = { k:P.ink, C:'#ff3d8b', c:'#b3175c', h:'#3a1530', r:'#7a2e1c', R:'#c0613a', S:'#c97a5a', s:'#f0a77f', v:'#ff7a2f', w:'#efe4fa', j:'#4b4fd6', J:'#3436a0', b:'#2a1020' };
 const BODY = ["......kkkk......",".....kCCCCk.....","....kCCCCCCk....","....kCCCCCCk....","...kcccccccck...","....khhhhhhk....","....khhhhhhk....",
 "...kShhhhhhSk...",".....kssssk.....","...kkvvvvvvkk...","..kwvvvvvvvvwk..","..kwvvvvvvvvwk..","..kwvwwwwwwvwk..","..kwvvvvvvvvwk..","..kskvvvvvvksk..","...kkvvvvvvkk..."];
+const BODY_F = ["......kkkk......",".....kCCCCk.....","....kCCCCCCk....","....kCCCCCCk....","...kcccrrccck...","...krrrrrrrrk...","...krrrRRrrrk...",
+"...krrrRRrrrk...","....kkrRRrkk....","...kkvkrrkvkk...","..kwvvkrrkvvwk..","..kwvvkrrkvvwk..","..kwvwkrrkwvwk..","..kwvvvkkvvvwk..","..kskvvvvvvksk..","...kkvvvvvvkk..."];
 const LEGS_A = ["....kjjjjjjk....","....kjjjjjjk....","....kjjJJjjk....","....kjjk.kjjk...","....kjjk.kjjk...","....kjjk.kJjk...","....kjjk..kbbk..","....kjjk..kkkk..",
 "....kJJk........","...kbbbk........","...kbbbbk.......","...kkkkkk......."];
 const LEGS_C = ["....kjjjjjjk....","....kjjjjjjk....","....kjjJJjjk....","....kjjkkjjk....","....kjjkkjjk....","....kjjkkjjk....","....kJJkkJJk....","....kbbkkbbk....",
@@ -641,10 +654,13 @@ const LEGS_J = ["....kjjjjjjk....","...kjjjjjjjjk...","...kjjkkkkjjk...","...kbb
 const rev = s => s.split('').reverse().join('');
 const SPR = {}, SPRW = {}, ICON = {};
 
-function makeTractor(f){
+function makeTractor(f, rider){ // rider : 'm', 'f' ou rien (tracteur vide du bonus)
   const [cv, c] = mk(26, 26); const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(x, y, w, h); };
   R(4, 0, 1, 14, P.ink); R(21, 0, 1, 14, P.ink); R(4, 0, 18, 1, P.ink); R(5, 1, 16, 1, '#ff7ab0');
-  R(10, 3, 6, 1, P.ink); R(10, 4, 6, 3, '#ff3d8b'); R(9, 7, 8, 1, '#b3175c'); R(10, 8, 6, 2, '#3a1530'); R(10, 10, 6, 3, '#efe4fa');
+  if (rider){
+    R(10, 3, 6, 1, P.ink); R(10, 4, 6, 3, '#ff3d8b'); R(9, 7, 8, 1, '#b3175c'); R(10, 10, 6, 3, '#efe4fa');
+    if (rider === 'f'){ R(9, 8, 8, 2, PPAL.r); R(12, 8, 2, 5, PPAL.r); R(12, 9, 1, 3, PPAL.R); } else R(10, 8, 6, 2, PPAL.h);
+  } else R(10, 10, 6, 3, '#4a1a5e');
   R(18, 3, 2, 10, P.ink);
   R(5, 12, 16, 2, P.ink); R(6, 13, 14, 7, '#ff7a2f'); R(6, 13, 14, 1, '#ffb24a'); R(9, 15, 8, 3, '#c2410c'); R(11, 16, 4, 1, '#ffe27a');
   R(0, 12, 6, 14, P.ink); R(20, 12, 6, 14, P.ink);
@@ -685,11 +701,11 @@ function makeIcons(){
   return I;
 }
 function buildSprites(){
-  const A = BODY.concat(LEGS_A), Bf = BODY.concat(LEGS_A.map(rev)), Cf = ["................","................"].concat(BODY, LEGS_C), Jf = BODY.concat(LEGS_J);
-  SPR.pRun = [fromMap(A, PPAL), fromMap(Cf, PPAL), fromMap(Bf, PPAL), fromMap(Cf, PPAL)];
-  SPR.pJump = fromMap(Jf, PPAL);
-  SPR.pHit = tint(SPR.pRun[1], '#ffffff');
-  SPR.tractor = [makeTractor(0), makeTractor(1)];
+  const hero = (body, id) => {
+    const run = [body.concat(LEGS_A), ['................', '................'].concat(body, LEGS_C), body.concat(LEGS_A.map(rev))].map(m => fromMap(m, PPAL));
+    return { run:[run[0], run[1], run[2], run[1]], jump:fromMap(body.concat(LEGS_J), PPAL), hit:tint(run[1], '#ffffff'), tractor:[makeTractor(0, id), makeTractor(1, id)] };
+  };
+  SPR.heroes = { m:hero(BODY, 'm'), f:hero(BODY_F, 'f') };
   const E = FAM.ETIQ.c, D = FAM.DOUA.c;
   const enemy = (name, fam, fn) => { SPR[name] = frames2(f => withAura(fn(f), FAM[fam].c)); SPRW[name] = SPR[name].map(s => tint(s, '#fff')); };
   enemy('label', 'ETIQ', f => paperMonster(19, 20, { header:'E220', hcol:'#c21d64', corner:true }, f));
@@ -729,7 +745,7 @@ function buildSprites(){
   SPR.grappe = [withAura(fromMap(["....gg....","...gg.....","....k.....",".oohohoo..","oohohohoo.",".ohohohoo.","..oohoho..","...ohoo...","....oo....","....o....."], { g:P.leaf, k:P.ink, o:'#9a2cb0', h:'#ff9ac8' }), '#ffe27a')];
   SPR.bouteille = [withAura(fromMap(["..pp..","..pp..","..kk..","..kk..",".kbbk.","kbbbbk","kbhbbk","kllllk","klyllk","kllllk","kbbbbk","kbhbbk","kbbbbk","kbbbbk",".kkkk."], { p:'#ff3d8b', k:P.ink, b:'#3a0f56', h:'#8a5aa8', l:'#ff9a5a', y:'#fff' }), '#ffe27a')];
   SPR.bureau = [withAura(ICON.bomb, '#ffffff')];
-  SPR.tracteurPick = [withAura(makeTractor(0), '#ffe27a')];
+  SPR.tracteurPick = [withAura(makeTractor(0, null), '#ffe27a')];
   // projectiles des outils
   SPR.shot = [
     withAura(fromMap(["ppppp","pwpwp","ppwpp","pwpwp","ppppp"], { p:'#ff3d8b', w:'#fff' }), '#ffd1e4'),
@@ -1035,6 +1051,7 @@ const G = {
   weapons:[true, false, false], weapon:0, bombOk:false, bombs:0, fireT:0,
   ents:[], shots:[], parts:[], floats:[], boss:null, nextSpawn:0, script:[],
   shake:0, flash:0, flashCol:'#fff', starFlash:0, banner:null, sub:null, sms:null, smsT:0, radio:null,
+  hero:store.get('avdj_hero') === 'f' ? 'f' : 'm',
   tips:{}, wrongT:0, demoT:0, best:+(store.get('avdj_best') || 0), coarse:false, phone:false,
 };
 
@@ -1509,11 +1526,12 @@ function drawPlayer(){
   const yo = (p.jy + p.hopY) * KPZ;
   const sw = Math.max(6, Math.round(14 - yo * 0.12)); ctx.fillStyle = 'rgba(8,2,18,.55)'; ctx.fillRect(Math.round(sx - sw / 2), Math.round(gy - 1), sw, 2); ctx.fillRect(Math.round(sx - sw / 2 + 2), Math.round(gy - 2), sw - 4, 1);
   if (p.inv > 0 && p.tractor <= 0 && Math.floor(G.rt * 18) % 2 === 0) return;
+  const hs = SPR.heroes[G.hero];
   let spr;
-  if (p.tractor > 0) spr = SPR.tractor[Math.floor(G.rt * 12) % 2];
-  else if (p.flash > 0) spr = SPR.pHit;
-  else if (p.jy > 0.05 || p.hopT < 1) spr = SPR.pJump;
-  else spr = SPR.pRun[Math.floor(p.run) % 4];
+  if (p.tractor > 0) spr = hs.tractor[Math.floor(G.rt * 12) % 2];
+  else if (p.flash > 0) spr = hs.hit;
+  else if (p.jy > 0.05 || p.hopT < 1) spr = hs.jump;
+  else spr = hs.run[Math.floor(p.run) % 4];
   const dx = Math.round(sx - spr.width / 2), dy = Math.round(gy - spr.height - yo);
   ctx.drawImage(spr, dx, dy);
   if (p.tractor <= 0 && G.state === 'play'){ ctx.fillStyle = WEAPONS[G.weapon].c; ctx.fillRect(dx + 12, dy + 13, 2, 3); ctx.fillStyle = '#fff'; ctx.fillRect(dx + 12, dy + 13, 1, 1); }
@@ -1685,7 +1703,7 @@ function shareUrl(){
 }
 async function share(){
   const url = shareUrl();
-  const txt = 'J\'ai survécu à la paperasse du vigneron : ' + fmtEur(G.score) + ' au compteur dans « À vous de jouer ». Étiquette, douane, facture électronique, registre phyto : à vous de jouer.' + (url ? ' ' + url : '');
+  const txt = 'J\'ai survécu à la paperasse des vignes : ' + fmtEur(G.score) + ' au compteur dans « À vous de jouer ». Étiquette, douanes, fisc, registre phyto : à vous de jouer.' + (url ? ' ' + url : '');
   try { if (navigator.share){ await navigator.share({ title:'À vous de jouer', text:txt }); $('share-msg').textContent = 'Merci pour le partage.'; return; } } catch(e){ if (e && e.name === 'AbortError') return; }
   try { await navigator.clipboard.writeText(txt); $('share-msg').textContent = 'Texte copié : collez-le dans un post LinkedIn.'; return; } catch(e){}
   const ta = $('share-txt'); ta.hidden = false; ta.value = txt; ta.focus(); ta.select(); $('share-msg').textContent = 'Copiez ce texte pour le partager.';
@@ -1773,6 +1791,20 @@ const device = () => G.phone ? 'phone' : G.coarse ? 'tablet' : 'desk';
 const esc = t => String(t).replace(/[&<>]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[c]));
 function renderHelp(){ document.querySelector('#ov-help .keys').innerHTML = HELP[device()].map(r => '<dt>' + esc(r[0]) + '</dt><dd>' + esc(r[1]) + '</dd>').join(''); }
 
+/* ---------- personnage : vigneron ou vigneronne ---------- */
+function setHero(h){
+  G.hero = h; store.set('avdj_hero', h);
+  document.querySelectorAll('.hero').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.hero === h)));
+  canvas.setAttribute('aria-label', 'Écran de jeu : ' + (h === 'f' ? 'une vigneronne court' : 'un vigneron court') + ' dans les rangs de vigne');
+}
+function initHeroes(){
+  document.querySelectorAll('.hero').forEach(b => {
+    b.querySelector('img').src = SPR.heroes[b.dataset.hero].run[0].toDataURL();
+    b.addEventListener('click', () => { SND.init(); SND.fx('sw'); setHero(b.dataset.hero); });
+  });
+  setHero(G.hero);
+}
+
 /* ---------- boutons des écrans ---------- */
 function toggleSound(){ SND.init(); SND.toggle(); if (G.state === 'pause') SND.suspend(); refreshTitle(); }
 function closeHelp(){ showOv(helpReturn); const back = helpReturn === 'ov-title' ? $('btn-help') : null; if (back) setTimeout(() => { try { back.focus({ preventScroll:true }); } catch(e){} }, 40); }
@@ -1834,6 +1866,7 @@ function frame(now){
 
 Object.assign(ICON, makeIcons());
 buildSprites();
+initHeroes();
 buildScene('sunset');
 fitAll(); updatePadUI(); refreshTitle(); fillPromo(); $('app').inert = true;
 requestAnimationFrame(frame);

@@ -90,3 +90,11 @@
 | 4 | 6/6, 2/6 | 4/6, 3/6 |
 
 Verdict : avant, trop facile, ce qui confirme le ressenti de Teddy. Après, la mission 1 reste un tutoriel, puis ça se tend en restant gagnable.
+
+## 21/11/2026 · Vigneron ou vigneronne
+
+**Demande de Teddy** : pouvoir choisir vigneron ou vigneronne, plus inclusif.
+
+**Fait** : deux vignettes sur l'écran d'accueil, choix mémorisé d'une partie à l'autre, personnage changé aussi dans le tracteur. La vigneronne a la même tenue, avec une queue de cheval auburn qui sort de la casquette. Textes accordés : accroche « Vigneron ou vigneronne, quatre obligations... », description et aperçu de partage, libellé d'accessibilité de l'écran, texte de partage devenu neutre (« la paperasse des vignes »), avec « douanes, fisc » mis à jour au passage.
+
+**Vérifié** : sélection, mémorisation après rechargement, partie avec la vigneronne, ordinateur, tablette et téléphone, aucune erreur.
