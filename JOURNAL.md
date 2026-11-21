@@ -139,3 +139,14 @@ Les deux écarts signalés plus haut sont tranchés par Teddy :
 - **TVA mensuelle** : validée par Teddy, parce que la TVA part dans le journal des ventes sur tous les logiciels comptables. La pub Meta peut garder « Valider la TVA mensuelle ».
 
 Textes du jeu mis à jour (mission 3) : consigne de mission (« transmises par Pennylane, plateforme agréée », « votre journal des ventes, TVA comprise, part tout seul dans le logiciel de votre comptable »), indice en jeu sur la TVA, SMS du cabinet. Pas de « TVA du mois » dans le jeu : la fiche de mission rappelle que le régime simplifié agricole, c'est une déclaration par an et quatre acomptes.
+
+## 21/11/2026 · Retour de Teddy : sauter les barrières, ou passer par le trou
+
+Demande : pouvoir sauter par-dessus les barrières NORME, tout en gardant le trou comme autre passage.
+
+- La barrière est plus basse (18 px au lieu de 24, soit 0,9 m au lieu de 1,25 m). Le saut (1,26 m au plus haut) la franchit s'il est bien placé.
+- Franchie si le joueur est à plus de 85 % de sa hauteur au contact, comme les dossiers au sol. Le saut doit partir entre 0,15 et 0,55 s environ avant la barrière (fenêtre un peu plus courte que pour un dossier). Le trou reste le choix sûr.
+- Bonus de 150 € et « PAR-DESSUS ! » à l'écran quand on la saute. Le tracteur la casse toujours.
+- Textes : aide (« Sautez par-dessus (bonus) ou passez par le trou ») et indice de la mission 2.
+
+Test par robot (8 à 15 barrières par cas) : saut précis 100 % franchies, saut approximatif 75 %, trop tôt 13 %, trop tard 0 %. L'équilibre des missions ne change pas pour un joueur qui prend le trou.

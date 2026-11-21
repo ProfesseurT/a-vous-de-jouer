@@ -190,7 +190,7 @@ textarea.share{width:100%;box-sizing:border-box;min-height:84px;background:var(-
       <span><i style="background:#4fe3ff"></i>Cyan : Registre phyto</span>
       <span><i style="background:#ffffff"></i>Blanc : n'importe quel outil</span>
     </div>
-    <p class="small">Chaque obligation qui vous échappe ajoute une <strong>étoile de retard</strong>. À cinq étoiles, c'est le <strong>contrôle</strong> : une grappe de sérénité en moins. Sans sérénité, c'est perdu. Les barrières <strong>NORME</strong> ne se sautent pas : changez de rang.</p>
+    <p class="small">Chaque obligation qui vous échappe ajoute une <strong>étoile de retard</strong>. À cinq étoiles, c'est le <strong>contrôle</strong> : une grappe de sérénité en moins. Sans sérénité, c'est perdu. Une barrière <strong>NORME</strong> ? Sautez par-dessus (bonus) ou passez par le trou.</p>
     <button class="btn-main" id="btn-help-close" type="button">Compris</button>
   </div>
 </section>
@@ -738,9 +738,9 @@ function buildSprites(){
   { const [cv, c] = mk(28, 7); const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(x, y, w, h); };
     R(4, 0, 20, 7, P.ink); R(1, 2, 26, 4, P.ink); R(5, 1, 18, 5, '#2a0b3e'); R(2, 3, 24, 2, '#2a0b3e'); R(8, 2, 5, 1, '#ff7ab0'); R(16, 4, 3, 1, '#c9b6e0'); R(20, 2, 2, 1, '#ff7ab0');
     SPR.flaque = [cv]; }
-  { const [cv, c] = mk(28, 24); const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(x, y, w, h); };
-    R(2, 8, 3, 16, P.ink); R(3, 8, 1, 16, P.metal); R(23, 8, 3, 16, P.ink); R(24, 8, 1, 16, P.metal);
-    R(0, 9, 28, 8, P.ink); for (let x = 1; x < 27; x++) for (let y = 10; y < 16; y++){ c.fillStyle = (((x + y) >> 2) & 1) ? '#ff3d8b' : '#ffffff'; c.fillRect(x, y, 1, 1); }
+  { const [cv, c] = mk(28, 18); const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(x, y, w, h); };
+    R(2, 8, 3, 10, P.ink); R(3, 8, 1, 10, P.metal); R(23, 8, 3, 10, P.ink); R(24, 8, 1, 10, P.metal);
+    R(0, 8, 28, 6, P.ink); for (let x = 1; x < 27; x++) for (let y = 9; y < 13; y++){ c.fillStyle = (((x + y) >> 2) & 1) ? '#ff3d8b' : '#ffffff'; c.fillRect(x, y, 1, 1); }
     R(2, 0, 24, 8, P.ink); R(3, 1, 22, 6, '#fff'); textOn(c, 'NORME', 4, 2, '#c21d64', 3);
     SPR.norme = [cv]; }
   // bonus
@@ -1101,7 +1101,7 @@ function buildScript(mi){
     ent(64, 'drm', 'p');
     hint(14, phone ? 'NOUVEAU : {o}VITISOFT{/}, CHOISI TOUT SEUL CONTRE LES ENNEMIS ORANGE.' : 'NOUVEAU : {o}VITISOFT{/}. ' + (touch ? 'BOUTON VITISOFT' : 'TOUCHE {o}2{/}') + ' POUR LES ENNEMIS ORANGE.', 4);
     wall(86);
-    hint(70, 'UNE {r}NORME{/} NE SE SAUTE PAS : TROUVEZ LE PASSAGE.');
+    hint(70, 'UNE {r}NORME{/} : SAUTEZ PAR-DESSUS OU PASSEZ PAR LE TROU.');
     hint(110, 'DAE, DSA, DAES : UN DOCUMENT PAR ENVOI, TOUT SUR {o}GAMMA 2{/}.', 3.6);
   } else if (mi === 2){
     ent(62, 'bureau', 'p');
@@ -1416,7 +1416,11 @@ function play(dt){
       const k = e.d.kind;
       if (k === 'pick'){ e.touched = true; e.dead = true; collect(e); continue; }
       if (k === 'low'){ e.touched = true; if (py > e.hgt * 0.85 || p.tractor > 0){ if (p.tractor > 0){ e.dead = true; burst(e.x, e.wz, 0.4, ['#fff', '#ffb24a'], 8, 2); } } else hurt(); continue; }
-      if (k === 'wall'){ e.touched = true; if (p.tractor > 0){ e.dead = true; burst(e.x, e.wz, 0.8, ['#fff', '#ff3d8b'], 12, 2.5); addScore(100); } else hurt(); continue; }
+      if (k === 'wall'){ e.touched = true;
+        if (p.tractor > 0){ e.dead = true; burst(e.x, e.wz, 0.8, ['#fff', '#ff3d8b'], 12, 2.5); addScore(100); }
+        else if (py > e.hgt * 0.85){ addScore(150); float(e.x, e.wz, e.hgt + 1, 'PAR-DESSUS ! +150', '#ffe27a'); SND.fx('coin'); }
+        else hurt();
+        continue; }
       if (k === 'enemy'){
         const ey = e.y + e.yo;
         if (ey < py + 1.6 && ey + e.hgt > py){ e.touched = true;
