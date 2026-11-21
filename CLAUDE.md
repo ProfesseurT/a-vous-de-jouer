@@ -35,7 +35,7 @@ Première fois : `npm install`. Après toute modification de `src/jeu.html` : `n
 - Personnage au choix sur l'accueil : vigneron ou vigneronne (`SPR.heroes`, choix mémorisé dans le navigateur). Textes neutres ou accordés : jamais « le vigneron » seul.
 - Une couleur = un outil : rose Viticode, orange Vitisoft, cyan Registre phyto, blanc n'importe lequel. Le bureau = bombe qui range l'écran.
 - Apparition des obligations à 32 m devant le vigneron (`SPAWN_Z = 40`, environ 3 s pour réagir) : retour de Teddy du 21/11, à 56 m le jeu était trop facile. Le tutoriel est décrit en distance d'arrivée, il suit tout seul ce réglage.
-- Étoiles de retard : chaque obligation qui passe ajoute une étoile (une seule par nuée), 5 = perdu ; 5 éliminations ou 9 s sans faute en retirent une.
+- Étoiles de retard : chaque obligation qui passe ajoute une étoile (une seule par nuée). À 5, « contrôle » : une grappe de sérénité en moins et les étoiles repartent à zéro (retour de Teddy du 21/11 : perdre la partie à 5 étoiles était trop dur, on ne peut pas tout attraper). 3 éliminations ou 6 s sans faute retirent une étoile. On ne perd que par la sérénité.
 - Textes et dates : objets `WEAPONS`, `MISSIONS`, `BOMB_INFO`, `QUIPS` en haut du script.
 - Lien de prévente : `LP_URL`. Adresse publique du jeu pour le partage : `PUBLIC_URL` (à renseigner au déploiement).
 - Banc de test : `window.AVDJ` (`step(n)` simule sans affichage, `bench(n)` mesure le coût d'une image).

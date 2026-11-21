@@ -188,7 +188,7 @@ textarea.share{width:100%;box-sizing:border-box;min-height:84px;background:var(-
       <span><i style="background:#4fe3ff"></i>Cyan : Registre phyto</span>
       <span><i style="background:#ffffff"></i>Blanc : n'importe quel outil</span>
     </div>
-    <p class="small">Chaque obligation qui vous échappe ajoute une <strong>étoile de retard</strong>. À cinq étoiles, ou sans sérénité, c'est perdu. Les barrières <strong>NORME</strong> ne se sautent pas : changez de rang.</p>
+    <p class="small">Chaque obligation qui vous échappe ajoute une <strong>étoile de retard</strong>. À cinq étoiles, c'est le <strong>contrôle</strong> : une grappe de sérénité en moins. Sans sérénité, c'est perdu. Les barrières <strong>NORME</strong> ne se sautent pas : changez de rang.</p>
     <button class="btn-main" id="btn-help-close" type="button">Compris</button>
   </div>
 </section>
@@ -1169,7 +1169,7 @@ function burst(x, wz, y, cols, n, power){
   for (let k = 0; k < n; k++) G.parts.push({ x, wz, y, vx:rand(-1, 1) * power, vy:rand(0.5, 2.2) * power, vz:rand(-1, 1.5) * power, col:pick(cols), t:rand(0.4, 0.9), s:Math.random() < 0.3 ? 2 : 1 });
 }
 function float(x, wz, y, txt, col){ G.floats.push({ x, wz, y, txt, col, t:1.1 }); }
-function showSub(txt, dur){ G.sub = { lines:wrapToks(richTokens(txt, '#ffffff'), 236, 5).map(l => renderToks(l, 5, 1, P.ink, '')), t:dur || 3.2 }; }
+function showSub(txt, dur){ G.sub = { lines:wrapToks(richTokens(txt, '#ffffff'), Math.min(236, W - 12), 5).map(l => renderToks(l, 5, 1, P.ink, '')), t:dur || 3.2 }; }
 function tipOnce(key, txt, dur){ if (G.tips[key]) return; G.tips[key] = 1; showSub(txt, dur || 3.6); }
 
 /* ---------- actions du joueur ---------- */
@@ -1206,7 +1206,7 @@ function killEnt(e, byShot){
   addScore(pts); float(e.x, e.wz, e.y + 1.2, '+' + pts, '#ffe27a');
   burst(e.x, e.wz, e.y + 0.6, ['#ffffff', '#f6ead8', FAM[e.fam].c, '#c9b6e0'], 14, 2.4);
   SND.fx('kill');
-  if (!e.d.noStar){ G.killStar++; if (G.killStar >= 5){ G.killStar = 0; if (G.stars > 0){ G.stars--; float(G.p.x, G.dist + PZ + 2, 2.2, 'RETARD -1', '#6ff0ff'); } } }
+  if (!e.d.noStar){ G.killStar++; if (G.killStar >= 3){ G.killStar = 0; if (G.stars > 0){ G.stars--; float(G.p.x, G.dist + PZ + 2, 2.2, 'RETARD -1', '#6ff0ff'); } } }
 }
 function hitEnt(e, s){
   const fam = FAM[e.fam];
@@ -1224,16 +1224,21 @@ function wrongWeapon(x, wz, y, famKey){
 }
 function hurt(){
   const p = G.p; if (p.inv > 0 || p.tractor > 0) return;
-  G.serenite--; p.inv = 1.5; p.flash = 0.15; G.combo = 0;
+  p.inv = 1.5; p.flash = 0.15; loseSerenite('serenite');
+}
+function loseSerenite(cause){
+  G.serenite--; G.combo = 0;
   G.shake = reduceMotion ? 0 : 7; G.flash = 0.22; G.flashCol = '#ff3d6e'; SND.fx('hurt');
   try { if (navigator.vibrate) navigator.vibrate(60); } catch(e){}
-  float(p.x, G.dist + PZ + 1.5, 2.2, '-1 SÉRÉNITÉ', '#ff7a9e');
-  if (G.serenite <= 0) gameOver('serenite');
+  float(G.p.x, G.dist + PZ + 1.5, 2.2, '-1 SÉRÉNITÉ', '#ff7a9e');
+  if (G.serenite <= 0) gameOver(cause);
 }
+// une obligation passée = une étoile ; à 5, contrôle : une grappe en moins et le retard repart à zéro
 function addStar(){
-  G.stars = Math.min(5, G.stars + 1); G.starFlash = 1.6; G.starT = 0; SND.fx('star');
-  tipOnce('star', 'UNE OBLIGATION VOUS A ÉCHAPPÉ : {o}RETARD +1{/}. À 5 ÉTOILES, C\'EST PERDU.', 4);
-  if (G.stars >= 5) gameOver('retard');
+  G.stars++; G.starFlash = 1.6; G.starT = 0; SND.fx('star');
+  if (G.stars < 5) return tipOnce('star', 'UNE OBLIGATION VOUS A ÉCHAPPÉ : {o}RETARD +1{/}. À 5 ÉTOILES, CONTRÔLE.', 4);
+  G.stars = 0; G.banner = { text:'CONTRÔLE !', sub:'-1 SÉRÉNITÉ, RETARD REMIS À ZÉRO', t:2.2 };
+  loseSerenite('controle');
 }
 function collect(e){
   const p = G.p;
@@ -1346,7 +1351,7 @@ function updateFx(dt){
   if (G.radio && (G.radio.t -= dt) <= 0) G.radio = null;
   if (G.sms && (G.sms.t -= dt) <= 0) G.sms = null;
   if (G.wrongT > 0) G.wrongT -= dt;
-  if (G.state === 'play' && G.stars > 0 && G.phase !== 'done'){ G.starT += dt; if (G.starT > 9){ G.starT = 0; G.stars--; } }
+  if (G.state === 'play' && G.stars > 0 && G.phase !== 'done'){ G.starT += dt; if (G.starT > 6){ G.starT = 0; G.stars--; } }
 }
 function attract(dt){
   G.speed = 8; G.dist += G.speed * dt;
@@ -1609,10 +1614,10 @@ function drawHUD(){
   }
   // bandeaux
   if (G.banner){
-    const bn = G.banner, big = textW(bn.text, 5) * 2 > 240 ? 1 : 2;
+    const bn = G.banner, big = textW(bn.text, 5) * 2 > W - 16 ? 1 : 2;
     const by = Math.round(HZ * 0.88);
     text(bn.text, W / 2, by, { align:'center', scale:big, color:'#ffffff', outline:'#c2410c', shadow:null });
-    if (bn.sub) text(bn.sub, W / 2, by + 9 * big + 6, { align:'center', color:'#ffb27a' });
+    if (bn.sub) text(bn.sub, W / 2, by + 9 * big + 6, { align:'center', color:'#ffb27a', outline:P.ink });
   }
 }
 function render(){
@@ -1664,7 +1669,7 @@ function gameOver(cause){
   if (G.state !== 'play') return;
   G.state = 'over'; SND.play(null); SND.fx('lose');
   saveBest();
-  $('ov-cause').textContent = cause === 'retard' ? 'Cinq obligations en retard : le dossier vous a rattrapé.' : 'Votre sérénité est tombée à zéro.';
+  $('ov-cause').textContent = cause === 'controle' ? 'Un contrôle de trop : votre sérénité est tombée à zéro.' : 'Votre sérénité est tombée à zéro.';
   $('ov-quip').textContent = pick(QUIPS);
   $('ov-stats').innerHTML = 'Mission ' + (G.mi + 1) + ' · <strong>' + fmtEur(G.score) + '</strong>';
   fillPromo();

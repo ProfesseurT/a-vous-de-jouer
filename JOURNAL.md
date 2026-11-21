@@ -98,3 +98,27 @@ Verdict : avant, trop facile, ce qui confirme le ressenti de Teddy. Après, la m
 **Fait** : deux vignettes sur l'écran d'accueil, choix mémorisé d'une partie à l'autre, personnage changé aussi dans le tracteur. La vigneronne a la même tenue, avec une queue de cheval auburn qui sort de la casquette. Textes accordés : accroche « Vigneron ou vigneronne, quatre obligations... », description et aperçu de partage, libellé d'accessibilité de l'écran, texte de partage devenu neutre (« la paperasse des vignes »), avec « douanes, fisc » mis à jour au passage.
 
 **Vérifié** : sélection, mémorisation après rechargement, partie avec la vigneronne, ordinateur, tablette et téléphone, aucune erreur.
+
+## 21/11/2026 · Retour de Teddy : la règle des étoiles est trop dure
+
+Constat de Teddy : on perd quand des obligations passent, alors qu'on ne peut pas toutes les attraper.
+
+Mesure avant changement (bot qui ne vise que les obligations à un rang d'écart au plus, comme un joueur humain, 8 parties par ligne) : 0 à 3 victoires sur 8 selon la mission, presque toutes perdues par les étoiles, mission 1 comprise.
+
+Nouvelle règle :
+- 5 étoiles ne font plus perdre la partie. C'est un « contrôle » : une grappe de sérénité en moins, et les étoiles repartent à zéro.
+- Les étoiles redescendent plus vite : une de moins toutes les 3 éliminations (au lieu de 5) ou après 6 s sans faute (au lieu de 9).
+- On ne perd plus que quand la sérénité tombe à zéro (chocs ou contrôles).
+
+Mesure après changement (bot, 8 parties par ligne) :
+
+| Mission | Bot « 1 rang », réflexes bons | Bot « 1 rang », distrait | Contrôles par partie |
+|---|---|---|---|
+| 1 | 8/8 | 8/8 | 1,1 |
+| 2 | 7/8 | 7/8 | 1 à 1,4 |
+| 3 | 8/8 | 7/8 | 0,4 à 0,9 |
+| 4 | 8/8 | 3/8 | 0,5 à 0,9 |
+
+Le bot qui chasse tout garde les mêmes résultats qu'avant (il perd surtout par les chocs). La mission 4 reste la plus dure, c'est voulu.
+
+Corrigés au passage (défauts d'affichage vus en testant) : sous-titres qui débordaient de l'écran sur téléphone en portrait, et texte sous les bandeaux (BOSS, CONTRÔLE, etc.) peu lisible sur les vignes, maintenant entouré d'un contour sombre.
