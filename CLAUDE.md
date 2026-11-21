@@ -8,12 +8,13 @@ But business : faire parler de la prévente du registre phyto et amener des vign
 
 | Fichier | Rôle |
 |---|---|
-| `src/jeu.html` | **La source unique.** CSS, écrans HTML et moteur JS dans un seul fichier. Publié tel quel en Artifact claude.ai. |
-| `index.html` | Généré par `node scripts/build.mjs` (page complète pour un hébergeur statique). Ne pas éditer à la main. |
-| `scripts/build.mjs` | Construit `index.html` et refuse tout tiret cadratin ou demi-cadratin. |
+| `src/jeu.html` | **La source unique, lisible.** CSS, écrans HTML et moteur JS dans un seul fichier. |
+| `index.html` | Généré : page complète minifiée pour un hébergeur statique. Ne pas éditer à la main. |
+| `dist/jeu.html` | Généré : fragment minifié publié en Artifact (non versionné). |
+| `scripts/build.mjs` | Minifie (esbuild), construit les deux fichiers, refuse tout tiret cadratin ou demi-cadratin. |
 | `JOURNAL.md` | Décisions, vérifications, état. |
 
-Après toute modification de `src/jeu.html` : `node scripts/build.mjs`.
+Première fois : `npm install`. Après toute modification de `src/jeu.html` : `npm run build`.
 
 ## Règles du client (héritées du projet Bureau du Vigneron)
 
@@ -35,4 +36,5 @@ Après toute modification de `src/jeu.html` : `node scripts/build.mjs`.
 - Étoiles de retard : chaque obligation qui passe ajoute une étoile (une seule par nuée), 5 = perdu ; 5 éliminations ou 9 s sans faute en retirent une.
 - Textes et dates : objets `WEAPONS`, `MISSIONS`, `BOMB_INFO`, `QUIPS` en haut du script.
 - Lien de prévente : `LP_URL`. Adresse publique du jeu pour le partage : `PUBLIC_URL` (à renseigner au déploiement).
-- Banc de test : `window.AVDJ` (dont `step(n)` pour simuler sans affichage).
+- Banc de test : `window.AVDJ` (`step(n)` simule sans affichage, `bench(n)` mesure le coût d'une image).
+- Performance (à préserver) : sol écrit pixel par pixel dans un tampon puis `putImageData` ; ceps rangés sur un atlas ; textes rendus une fois en petites images ; aucune allocation dans la boucle (tableaux compactés sur place, liste de profondeur réutilisée) ; plus aucun calcul derrière un écran opaque ; musique non programmée quand le son est coupé.

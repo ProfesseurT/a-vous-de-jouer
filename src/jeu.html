@@ -3,7 +3,7 @@
 <meta name="theme-color" content="#12051f">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;0,600;0,700;1,800;1,900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;0,700;1,900&display=swap">
 <style>
 /* Borne d'arcade néon : un écran 16 bits (256 x 224) au centre, la charte « À vous de jouer » autour
    (coucher de soleil violet, rose, orange ; Poppins noire italique). Univers unique, sombre, assumé. */
@@ -26,7 +26,7 @@ body{margin:0;background:var(--ink);color:var(--text);font-family:var(--body);ov
 #stage{grid-area:stage;position:relative;min-height:0;min-width:0;display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center}
 #brand{display:none;margin:0;text-align:center;font-family:var(--display);font-weight:900;font-style:italic;text-transform:uppercase;line-height:.92;
   font-size:clamp(28px,9vw,42px);color:#fff;letter-spacing:-.02em;text-shadow:.06em .06em 0 var(--orange),0 0 .35em rgba(255,61,139,.7)}
-#brand small{display:block;margin-bottom:6px;font-style:normal;font-weight:600;font-size:10px;letter-spacing:.26em;text-shadow:none;color:rgba(255,255,255,.85)}
+#brand small{display:block;margin-bottom:6px;font-style:normal;font-weight:700;font-size:10px;letter-spacing:.26em;text-shadow:none;color:rgba(255,255,255,.85)}
 .coarse:not(.landscape) #brand.room{display:block}
 #screen{position:relative;border-radius:4px;overflow:hidden;touch-action:none;
   box-shadow:0 0 0 2px rgba(255,61,139,.45),0 0 42px rgba(255,61,139,.32),0 24px 60px rgba(0,0,0,.55)}
@@ -67,7 +67,7 @@ body{margin:0;background:var(--ink);color:var(--text);font-family:var(--body);ov
 .ov.see{-webkit-backdrop-filter:none;backdrop-filter:none}
 .ov.see{background:linear-gradient(180deg,rgba(20,6,48,.35) 0%,rgba(18,5,31,.62) 45%,rgba(18,5,31,.9) 100%)}
 .card{width:min(100%,540px);margin:auto;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}
-.eyebrow{margin:0;font-weight:600;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.92)}
+.eyebrow{margin:0;font-weight:700;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.92)}
 .logo{margin:0;font-family:var(--display);font-weight:900;font-style:italic;text-transform:uppercase;line-height:.9;letter-spacing:-.02em;
   color:#fff;font-size:clamp(46px,13.5vw,88px);text-shadow:.055em .055em 0 var(--orange),0 0 .32em rgba(255,61,139,.8);
   display:flex;flex-direction:column;align-items:center;text-wrap:balance}
@@ -80,7 +80,7 @@ body{margin:0;background:var(--ink);color:var(--text);font-family:var(--body);ov
   box-shadow:0 0 24px rgba(255,61,139,.35)}
 .btn-main:hover{background:#d9531a}
 .btn-ghost{appearance:none;background:transparent;border:1px solid rgba(255,122,176,.55);border-radius:8px;color:var(--text);
-  font:600 14px/1.2 var(--body);padding:11px 18px;cursor:pointer}
+  font:700 14px/1.2 var(--body);padding:11px 18px;cursor:pointer}
 .btn-ghost:hover{border-color:var(--pink-soft);color:#fff}
 .btn-main:focus-visible,.btn-ghost:focus-visible,.pbtn:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
 .row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
@@ -113,7 +113,7 @@ body{margin:0;background:var(--ink);color:var(--text);font-family:var(--body);ov
 .promo .price{margin:0;font-weight:900;font-style:italic;font-size:clamp(34px,9vw,48px);line-height:1.05;color:#fff}
 .promo .price span{font-size:17px;font-style:normal;font-weight:700;color:var(--text)}
 .promo p{margin:0}
-.quote{margin:0;font-style:italic;font-weight:600;font-size:16px;line-height:1.5;color:#fff;max-width:36ch}
+.quote{margin:0;font-style:italic;font-weight:900;font-size:16px;line-height:1.5;color:#fff;max-width:36ch}
 .quote cite{display:block;margin-top:4px;font-style:normal;font-weight:500;font-size:12px;color:var(--mute)}
 .keys{width:100%;display:grid;grid-template-columns:auto 1fr;gap:8px 14px;text-align:left;font-size:14px;line-height:1.45;align-items:baseline}
 .keys dt{font-weight:700;color:#fff;white-space:nowrap}
@@ -337,7 +337,6 @@ const irand = (a, b) => Math.floor(rand(a, b + 1));
 const pick = a => a[Math.floor(Math.random() * a.length)];
 function mk(w, h){ const c = document.createElement('canvas'); c.width = Math.max(1, w | 0); c.height = Math.max(1, h | 0); const x = c.getContext('2d'); x.imageSmoothingEnabled = false; return [c, x]; }
 function hex2rgb(h){ h = h.replace('#',''); if (h.length === 3) h = h.split('').map(c => c + c).join(''); const n = parseInt(h, 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }
-function mixHex(a, b, t){ const A = hex2rgb(a), B = hex2rgb(b); return 'rgb(' + Math.round(lerp(A[0],B[0],t)) + ',' + Math.round(lerp(A[1],B[1],t)) + ',' + Math.round(lerp(A[2],B[2],t)) + ')'; }
 function rng(seed){ let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 const BAYER = [0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5];
 const store = {
@@ -402,11 +401,16 @@ const ACCENTS = { 'À':'Ag','Â':'Ac','Ä':'At','É':'Ea','È':'Eg','Ê':'Ec','�
 function normStr(s){
   return String(s).replace(/[’‘]/g, "'").replace(/…/g, '...').replace(/[  ]/g, ' ').replace(/œ/g, 'oe').replace(/Œ/g, 'OE').toUpperCase();
 }
-const glyphCache = new Map();
+const GLYPHS = { 3:new Map(), 5:new Map() }, ADV = { 3:new Map(), 5:new Map() };
 function glyphDef(font, ch){ const base = ACCENTS[ch] ? ACCENTS[ch][0] : ch; const t = font === 5 ? F5 : F3; return t[base] || t['?'] || t[' ']; }
-function charAdv(ch, font){ if (ch === ' ') return font === 5 ? 4 : 3; const d = glyphDef(font, ch); return d.indexOf('|') + 1; }
+function charAdv(ch, font){
+  let a = ADV[font].get(ch);
+  if (a === undefined){ a = ch === ' ' ? (font === 5 ? 4 : 3) : glyphDef(font, ch).indexOf('|') + 1; ADV[font].set(ch, a); }
+  return a;
+}
 function glyph(font, ch, color){
-  const key = font + ch + color; let g = glyphCache.get(key); if (g) return g;
+  let m = GLYPHS[font].get(color); if (!m) GLYPHS[font].set(color, m = new Map());
+  let g = m.get(ch); if (g) return g;
   const rows = glyphDef(font, ch).split('|'); const w = rows[0].length;
   const top = font === 5 ? 2 : 1, extra = font === 5 ? 2 : 1;
   const [cv, c] = mk(w, rows.length + top + extra); c.fillStyle = color;
@@ -424,9 +428,9 @@ function glyph(font, ch, color){
     else if (acc === 'd') c.fillRect(m, top + 5, 1, 1);
     else c.fillRect(m, 0, 1, 1);
   }
-  g = { cv, top }; glyphCache.set(key, g); return g;
+  g = { cv, top }; m.set(ch, g); return g;
 }
-function textW(str, font){ str = normStr(str).replace(/\{[a-zA-Z\/]\}/g, ''); let w = 0; for (const ch of str) w += charAdv(ch, font); return w ? w - 1 : 0; }
+const textW = (str, font) => toks(str, '#fff')['w' + font];
 function textOn(c, str, x, y, color, font){ str = normStr(str); let cx = x; for (const ch of str){ if (ch !== ' '){ const g = glyph(font, ch, color); c.drawImage(g.cv, cx, y - g.top); } cx += charAdv(ch, font); } }
 const MK = { p:'#ff5c9e', o:'#ffa166', c:'#6ff0ff', y:'#ffe27a', w:'#ffffff', r:'#ff5577', l:'#c9b6e0' };
 function richTokens(str, base){
@@ -438,28 +442,45 @@ function richTokens(str, base){
   }
   return out;
 }
-function toksW(toks, font){ let w = 0; for (const t of toks) w += charAdv(t[0], font); return w ? w - 1 : 0; }
-function drawToks(toks, x, y, font, scale, shadow, forceCol){
+function toksW(tk, font){ let w = 0; for (const t of tk) w += charAdv(t[0], font); return w ? w - 1 : 0; }
+// jetons mémorisés : le HUD réaffiche les mêmes chaînes à chaque image sans rien réallouer
+const TOK = new Map();
+function toks(str, base){
+  const key = base + str; let t = TOK.get(key);
+  if (!t){ if (TOK.size > 400) TOK.clear(); t = richTokens(str, base); t.w3 = toksW(t, 3); t.w5 = toksW(t, 5); TOK.set(key, t); }
+  return t;
+}
+const OUTLINE = [[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[1,1],[-1,1],[1,-1]];
+function drawToks(c, tk, x, y, font, scale, shadow, forceCol){
   let cx = x;
-  for (const t of toks){
+  for (const t of tk){
     const ch = t[0];
     if (ch !== ' '){
-      if (shadow){ const gs = glyph(font, ch, shadow); ctx.drawImage(gs.cv, cx + scale, y - gs.top * scale + scale, gs.cv.width * scale, gs.cv.height * scale); }
-      const g = glyph(font, ch, forceCol || t[1]); ctx.drawImage(g.cv, cx, y - g.top * scale, g.cv.width * scale, g.cv.height * scale);
+      if (shadow){ const gs = glyph(font, ch, shadow); c.drawImage(gs.cv, cx + scale, y - gs.top * scale + scale, gs.cv.width * scale, gs.cv.height * scale); }
+      const g = glyph(font, ch, forceCol || t[1]); c.drawImage(g.cv, cx, y - g.top * scale, g.cv.width * scale, g.cv.height * scale);
     }
     cx += charAdv(ch, font) * scale;
   }
 }
-function text(str, x, y, o = {}){
-  const font = o.font || 5, scale = o.scale || 1;
-  const toks = richTokens(str, o.color || '#ffffff');
-  const w = toksW(toks, font) * scale;
-  const sx = Math.round(o.align === 'center' ? x - w / 2 : o.align === 'right' ? x - w : x);
-  if (o.outline){ for (const d of [[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[1,1],[-1,1],[1,-1]]) drawToks(toks, sx + d[0] * scale, y + d[1] * scale, font, scale, null, o.outline); }
-  drawToks(toks, sx, y, font, scale, o.shadow === undefined ? P.ink : o.shadow, null);
-  return w;
+// Un texte = une petite image calculée une fois (ombre et contour compris), puis collée d'un seul coup à chaque image.
+function renderToks(tk, font, scale, shadow, outline){
+  const w = toksW(tk, font) * scale, pad = outline ? scale : 0, sh = shadow ? scale : 0;
+  const top = (font === 5 ? 2 : 1) * scale, gh = (font === 5 ? 11 : 7) * scale;
+  const [cv, c] = mk(w + pad * 2 + sh, gh + pad * 2 + sh), x = pad, y = pad + top;
+  if (outline) for (const d of OUTLINE) drawToks(c, tk, x + d[0] * scale, y + d[1] * scale, font, scale, null, outline);
+  drawToks(c, tk, x, y, font, scale, shadow, null);
+  return { cv, ox:x, oy:y, w };
 }
-function wrapToks(toks, maxW, font){
+const TXT = new Map();
+function text(str, x, y, o = {}){
+  const font = o.font || 5, scale = o.scale || 1, color = o.color || '#ffffff', shadow = o.shadow === undefined ? P.ink : o.shadow, outline = o.outline || '';
+  const key = font + '' + scale + color + shadow + outline + str;
+  let sp = TXT.get(key);
+  if (!sp){ if (TXT.size > 300) TXT.clear(); sp = renderToks(toks(str, color), font, scale, shadow, outline); TXT.set(key, sp); }
+  ctx.drawImage(sp.cv, Math.round(o.align === 'center' ? x - sp.w / 2 : o.align === 'right' ? x - sp.w : x) - sp.ox, y - sp.oy);
+  return sp.w;
+}
+function wrapToks(tk, maxW, font){
   const lines = []; let line = [], lineW = 0, word = [], wordW = 0;
   const sp = charAdv(' ', font);
   const flush = () => {
@@ -468,8 +489,10 @@ function wrapToks(toks, maxW, font){
     if (line.length){ line.push([' ', null]); lineW += sp; }
     for (const t of word) line.push(t); lineW += wordW; word = []; wordW = 0;
   };
-  for (const t of toks){ if (t[0] === ' ') flush(); else { word.push(t); wordW += charAdv(t[0], font); } }
-  flush(); if (line.length) lines.push(line); return lines;
+  for (const t of tk){ if (t[0] === ' ') flush(); else { word.push(t); wordW += charAdv(t[0], font); } }
+  flush(); if (line.length) lines.push(line);
+  for (const l of lines) l.w = toksW(l, font);
+  return lines;
 }
 
 /* =====================================================================
@@ -661,13 +684,12 @@ function makeIcons(){
   return I;
 }
 function buildSprites(){
-  const pr = fromMap.bind(null);
   const A = BODY.concat(LEGS_A), Bf = BODY.concat(LEGS_A.map(rev)), Cf = ["................","................"].concat(BODY, LEGS_C), Jf = BODY.concat(LEGS_J);
-  SPR.pRun = [pr(A, PPAL), pr(Cf, PPAL), pr(Bf, PPAL), pr(Cf, PPAL)];
-  SPR.pJump = pr(Jf, PPAL);
+  SPR.pRun = [fromMap(A, PPAL), fromMap(Cf, PPAL), fromMap(Bf, PPAL), fromMap(Cf, PPAL)];
+  SPR.pJump = fromMap(Jf, PPAL);
   SPR.pHit = tint(SPR.pRun[1], '#ffffff');
   SPR.tractor = [makeTractor(0), makeTractor(1)];
-  const E = FAM.ETIQ.c, D = FAM.DOUA.c, C = FAM.PHYT.c;
+  const E = FAM.ETIQ.c, D = FAM.DOUA.c;
   const enemy = (name, fam, fn) => { SPR[name] = frames2(f => withAura(fn(f), FAM[fam].c)); SPRW[name] = SPR[name].map(s => tint(s, '#fff')); };
   enemy('label', 'ETIQ', f => paperMonster(19, 20, { header:'E220', hcol:'#c21d64', corner:true }, f));
   enemy('nutri', 'ETIQ', f => paperMonster(19, 22, { header:'KCAL', hcol:'#ff3d8b', corner:false }, f));
@@ -707,7 +729,6 @@ function buildSprites(){
   SPR.bouteille = [withAura(fromMap(["..pp..","..pp..","..kk..","..kk..",".kbbk.","kbbbbk","kbhbbk","kllllk","klyllk","kllllk","kbbbbk","kbhbbk","kbbbbk","kbbbbk",".kkkk."], { p:'#ff3d8b', k:P.ink, b:'#3a0f56', h:'#8a5aa8', l:'#ff9a5a', y:'#fff' }), '#ffe27a')];
   SPR.bureau = [withAura(ICON.bomb, '#ffffff')];
   SPR.tracteurPick = [withAura(makeTractor(0), '#ffe27a')];
-  for (const k of ['grappe', 'bouteille', 'bureau', 'tracteurPick', 'pile', 'flaque', 'norme']) SPRW[k] = SPR[k].map(s => tint(s, '#fff'));
   // projectiles des outils
   SPR.shot = [
     withAura(fromMap(["ppppp","pwpwp","ppwpp","pwpwp","ppppp"], { p:'#ff3d8b', w:'#fff' }), '#ffd1e4'),
@@ -748,11 +769,32 @@ const PALS = {
     gNear:'#2a1840', gNear2:'#321d4a', gFar:'#7a4374', track:'#22123a', wire:'rgba(255,200,220,.32)', starN:16,
     vine:{ season:'winter', trunk:'#1f0c30', leafA:'#26093c', leafB:'#300d4a', leafDark:'#1a0629', rim:'#ffc0d8', rim2:'#ff8fbf', grape:'#7a2490', grapeHi:'#ff9ac8', frost:'#f2ecff' } },
 };
-let PAL = PALS.sunset, BG = null, HILLS = null, CHATEAU = null, STARS = [], groundCols = [];
-const plantCache = new Map();
-function plantSprite(h, v){
-  const vp = PAL.vine, key = vp.season + h + '_' + v;
-  let s = plantCache.get(key); if (s) return s;
+let PAL = PALS.sunset, BG = null, HILLS = null, CHATEAU = null, STARS = [];
+let GROUND = null, GBUF = null, GZ = null, GA = null, GB = null, GT = null, GF = null;
+const LE = new Uint8Array(new Uint32Array([1]).buffer)[0] === 1;
+const u32 = c => LE ? ((255 << 24) | (c[2] << 16) | (c[1] << 8) | c[0]) >>> 0 : ((c[0] << 24) | (c[1] << 16) | (c[2] << 8) | 255) >>> 0;
+const mixRGB = (a, b, t) => [Math.round(lerp(a[0], b[0], t)), Math.round(lerp(a[1], b[1], t)), Math.round(lerp(a[2], b[2], t))];
+// Les ceps sont rangés sur une planche unique (atlas) : la carte graphique les dessine d'un bloc.
+let PLANTS = [[], [], []], warmId = 0, ATLAS = null, ACX = null, AX = 0, AY = 0, AROW = 0;
+const ATLAS_W = 1024, ATLAS_H = 1536;
+function resetAtlas(){ [ATLAS, ACX] = mk(ATLAS_W, ATLAS_H); AX = 0; AY = 0; AROW = 0; }
+function toAtlas(cv){
+  if (AX + cv.width > ATLAS_W){ AX = 0; AY += AROW + 1; AROW = 0; }
+  if (AY + cv.height > ATLAS_H) return { cv, x:0, y:0, w:cv.width, h:cv.height }; // planche pleine : l'image reste seule
+  ACX.drawImage(cv, AX, AY);
+  const r = { cv:ATLAS, x:AX, y:AY, w:cv.width, h:cv.height };
+  AX += cv.width + 1; if (cv.height > AROW) AROW = cv.height;
+  return r;
+}
+const plantSprite = (h, v) => PLANTS[v][h] || (PLANTS[v][h] = toAtlas(makePlant(h, v)));
+// préchauffe les ceps de la scène par petits lots, sans bloquer l'affichage
+function warmPlants(){
+  const id = ++warmId, hMax = Math.ceil(1.55 * FOC / Math.max(2.1, ZB - 0.8)) + 1; let h = 2;
+  const step = () => { if (id !== warmId) return; const end = performance.now() + 6; while (h <= hMax && performance.now() < end){ for (let v = 0; v < 3; v++) plantSprite(h, v); h++; } if (h <= hMax) setTimeout(step, 16); };
+  setTimeout(step, 0);
+}
+function makePlant(h, v){
+  const vp = PAL.vine;
   const w = Math.max(3, Math.round(h * 0.7));
   const [cv, c] = mk(w, h); const r = rng(h * 31 + v * 7 + 3);
   const put = (x, y, col) => { if (x >= 0 && y >= 0 && x < w && y < h){ c.fillStyle = col; c.fillRect(x, y, 1, 1); } };
@@ -767,7 +809,7 @@ function plantSprite(h, v){
       put(Math.round(x), Math.round(y), vp.rim); put(Math.round(x), Math.round(y) + 1, vp.rim2);
     }
     if (h > 10){ put(tx - 1, h - 1, vp.frost); put(tx + tw, h - 1, vp.frost); put(tx + tw + 2, h - 1, vp.frost); }
-    plantCache.set(key, cv); return cv;
+    return cv;
   }
   const cBot = Math.round(h * 0.68), blobs = [], nb = h < 10 ? 2 : (h > 30 ? 7 : 4);
   for (let k = 0; k < nb; k++) blobs.push([w * (0.18 + 0.64 * r()), cBot * (0.3 + 0.55 * r()), Math.max(1.3, h * (0.16 + 0.1 * r()))]);
@@ -787,7 +829,7 @@ function plantSprite(h, v){
     const gx = Math.round(w * (0.2 + 0.6 * r())), gy = Math.round(cBot * 0.82 + r() * h * 0.06);
     for (let row = 0; row < 4; row++){ const n = 4 - row; for (let m = 0; m < n; m++){ const xx = gx + Math.round((m - (n - 1) / 2) * gs * 1.25), yy = gy + row * gs; c.fillStyle = vp.grape; c.fillRect(xx, yy, gs, gs); if (gs > 1 || (m + row) % 2 === 0){ c.fillStyle = vp.grapeHi; c.fillRect(xx, yy, 1, 1); } } }
   }
-  plantCache.set(key, cv); return cv;
+  return cv;
 }
 let SCENE = 'sunset';
 function setRes(w, h){
@@ -799,7 +841,7 @@ function setRes(w, h){
   buildScene(SCENE);
 }
 function buildScene(name){
-  SCENE = name; PAL = PALS[name]; plantCache.clear();
+  SCENE = name; PAL = PALS[name]; PLANTS = [[], [], []]; resetAtlas();
   // ciel tramé (dithering 16 bits) + soleil à rayures
   const [cv, c] = mk(W, HZ + 1); const img = c.createImageData(W, HZ + 1), d = img.data;
   const sky = PAL.sky.map(hex2rgb), sun = PAL.sun.map(hex2rgb), n = sky.length;
@@ -850,11 +892,14 @@ function buildScene(name){
     R2(cx - 2, by - 10, 1, 2, lit); R2(cx + 2, by - 10, 1, 2, lit); R2(cx - 1, by - 3, 3, 3, lit); R2(cx, by - 16, 1, 1, lit);
     CHATEAU = ch; }
   // couleurs du sol par ligne (profondeur fixe : la caméra ne bouge pas en hauteur)
-  groundCols = [];
+  GROUND = ctx.createImageData(W, H - HZ - 1); GBUF = new Uint32Array(GROUND.data.buffer);
+  GZ = new Float32Array(H); GA = new Uint32Array(H); GB = new Uint32Array(H); GT = new Uint32Array(H); GF = new Uint32Array(H);
+  const gn = hex2rgb(PAL.gNear), gn2 = hex2rgb(PAL.gNear2), gf = hex2rgb(PAL.gFar), tr = hex2rgb(PAL.track), fr = hex2rgb('#f2ecff');
   for (let y = HZ + 1; y < H; y++){
-    const Z = FOC * CAM / (y - HZ), f = Math.pow(clamp((Z - 3) / 70, 0, 1), 0.55);
-    groundCols[y] = { Z, a:mixHex(PAL.gNear, PAL.gFar, f), b:mixHex(PAL.gNear2, PAL.gFar, f), tr:mixHex(PAL.track, PAL.gFar, f * 0.9) };
+    const Z = FOC * CAM / (y - HZ), f = Math.pow(clamp((Z - 3) / 70, 0, 1), 0.55), a = mixRGB(gn, gf, f);
+    GZ[y] = Z; GA[y] = u32(a); GB[y] = u32(mixRGB(gn2, gf, f)); GT[y] = u32(mixRGB(tr, gf, f * 0.9)); GF[y] = u32(mixRGB(a, fr, 0.5));
   }
+  warmPlants();
 }
 
 /* =====================================================================
@@ -905,6 +950,7 @@ const SND = (() => {
   function schedule(){
     if (!ac || !song) return;
     const spb = 60 / song.bpm / 4, len = song.chords.length * 16;
+    if (muted){ nextT = ac.currentTime + 0.05; return; }
     if (nextT < ac.currentTime) nextT = ac.currentTime + 0.02;
     while (nextT < ac.currentTime + 0.15){
       playStep(step, nextT, spb);
@@ -982,7 +1028,7 @@ const BOSSES = [
   { name:'LA PAPERASSE', fam:'CYCLE', hp:48, spr:'boss3', atk:['throw','slam','swarm','summon','throw'], every:1.45 },
 ];
 const G = {
-  state:'title', t:0, rt:0, mi:0, dist:0, speed:8, camX:0, phase:'run', doneT:0,
+  state:'title', rt:0, cover:false, dirty:true, mi:0, dist:0, speed:8, camX:0, phase:'run', doneT:0,
   p:{ lane:2, x:0, hopFrom:0, hopTo:0, hopT:1, hopY:0, jy:0, vy:0, inv:0, run:0, queued:0, tractor:0, flash:0 },
   serenite:5, stars:0, starT:0, killStar:0, score:0, startScore:0, startBombs:0, combo:0, comboT:0,
   weapons:[true, false, false], weapon:0, bombOk:false, bombs:0, fireT:0,
@@ -1095,11 +1141,14 @@ function autoWeapon(){
 }
 
 /* ---------- effets ---------- */
+function compact(a, keep){ let j = 0; for (let i = 0; i < a.length; i++){ const v = a[i]; if (keep(v)) a[j++] = v; } a.length = j; }
+const keepPart = q => q.t > 0 && q.wz - G.dist > 1.2, keepFloat = f => f.t > 0;
+const keepShot = s => !s.dead && s.wz - G.dist < 68, keepEnt = e => !e.dead && e.wz - G.dist > 0.8;
 function burst(x, wz, y, cols, n, power){
   for (let k = 0; k < n; k++) G.parts.push({ x, wz, y, vx:rand(-1, 1) * power, vy:rand(0.5, 2.2) * power, vz:rand(-1, 1.5) * power, col:pick(cols), t:rand(0.4, 0.9), s:Math.random() < 0.3 ? 2 : 1 });
 }
 function float(x, wz, y, txt, col){ G.floats.push({ x, wz, y, txt, col, t:1.1 }); }
-function showSub(txt, dur){ G.sub = { toks:richTokens(txt, '#ffffff'), t:dur || 3.2 }; }
+function showSub(txt, dur){ G.sub = { lines:wrapToks(richTokens(txt, '#ffffff'), 236, 5).map(l => renderToks(l, 5, 1, P.ink, '')), t:dur || 3.2 }; }
 function tipOnce(key, txt, dur){ if (G.tips[key]) return; G.tips[key] = 1; showSub(txt, dur || 3.6); }
 
 /* ---------- actions du joueur ---------- */
@@ -1265,9 +1314,9 @@ function updatePlayer(dt){
 }
 function updateFx(dt){
   for (const q of G.parts){ q.t -= dt; q.x += q.vx * dt; q.wz += q.vz * dt; q.y += q.vy * dt; q.vy -= 6 * dt; if (q.y < 0){ q.y = 0; q.vy *= -0.3; q.vx *= 0.6; } }
-  G.parts = G.parts.filter(q => q.t > 0 && q.wz - G.dist > 1.2);
+  compact(G.parts, keepPart);
   for (const f of G.floats){ f.t -= dt; f.y += dt * 0.9; }
-  G.floats = G.floats.filter(f => f.t > 0);
+  compact(G.floats, keepFloat);
   if (G.shake > 0) G.shake = Math.max(0, G.shake - dt * 30);
   if (G.flash > 0) G.flash -= dt;
   if (G.starFlash > 0) G.starFlash -= dt;
@@ -1330,7 +1379,7 @@ function play(dt){
     }
     if (!s.dead && G.boss && G.boss.enter <= 0 && G.boss.dying <= 0 && Math.abs(s.x - G.boss.x) < 2.8 && s.prev <= bwz && s.wz >= bwz){ hitBoss(s); s.dead = true; }
   }
-  G.shots = G.shots.filter(s => !s.dead && s.wz - G.dist < 68);
+  compact(G.shots, keepShot);
   // contacts avec le joueur
   const py = p.jy + p.hopY;
   for (const e of G.ents){
@@ -1352,13 +1401,13 @@ function play(dt){
       if (G.state === 'play' && G.phase !== 'done') addStar();
     }
   }
-  G.ents = G.ents.filter(e => !e.dead && e.wz - G.dist > 0.8);
+  compact(G.ents, keepEnt);
   if (G.boss) updateBoss(dt);
   // fin de mission
   if (G.phase === 'done'){ G.doneT -= dt; if (G.doneT <= 0){ if (G.mi >= MISSIONS.length - 1) victory(); else showBrief(G.mi + 1); } }
   // SMS
   G.smsT -= dt;
-  if (G.smsT <= 0 && G.phase === 'run'){ const s = pick(m.sms); G.sms = { from:s[0], msg:s[1], t:5 }; G.smsT = rand(26, 38); SND.fx('coin'); }
+  if (G.smsT <= 0 && G.phase === 'run'){ const s = pick(m.sms); G.sms = { from:s[0], lines:wrapToks(richTokens(s[1], '#efe4fa'), 128, 3).map(l => renderToks(l, 3, 1, null, '')), t:5 }; G.smsT = rand(26, 38); SND.fx('coin'); }
   updateFx(dt);
 }
 
@@ -1376,15 +1425,23 @@ function drawSky(){
   ctx.drawImage(CHATEAU, Math.round(W / 2 - cw / 2 - G.camX * 1.4), HZ - chh + 1, cw, chh);
   ctx.fillStyle = PAL.crim; ctx.globalAlpha = 0.7; ctx.fillRect(0, HZ, W, 1); ctx.globalAlpha = 1;
 }
-function drawGround(){
-  for (let y = HZ + 1; y < H; y++){
-    const g = groundCols[y]; const band = Math.floor((g.Z + G.dist) / 2.6) & 1;
-    ctx.fillStyle = band ? g.a : g.b; ctx.fillRect(0, y, W, 1);
-    const k = FOC / g.Z, tw = Math.max(1, Math.round(0.24 * k));
-    ctx.fillStyle = g.tr;
-    for (let l = 0; l < 5; l++){ const lx = LANE_X(l); for (const o of [-0.55, 0.55]){ const x = W / 2 + (lx + o - G.camX) * k; if (x > -tw && x < W) ctx.fillRect(Math.round(x - tw / 2), y, tw, 1); } }
+// Le sol est écrit pixel par pixel dans un tampon, puis envoyé en une fois : bandes qui défilent et ornières des 5 allées.
+function drawGround(ox, oy){
+  const buf = GBUF, d = G.dist, cx = G.camX;
+  for (let y = HZ + 1, row = 0; y < H; y++, row += W){
+    const Z = GZ[y]; buf.fill(((Z + d) / 2.6 | 0) & 1 ? GA[y] : GB[y], row, row + W);
+    const k = FOC / Z, tw = Math.max(1, Math.round(0.24 * k)), c = GT[y], base = W / 2 - cx * k - tw / 2;
+    for (let l = -2; l <= 2; l++){
+      for (let o = -1; o <= 1; o += 2){
+        const x = Math.round(base + (l * LW + o * 0.55) * k);
+        if (x < W && x + tw > 0) buf.fill(c, row + (x < 0 ? 0 : x), row + (x + tw > W ? W : x + tw));
+      }
+    }
   }
-  if (PAL.vine.season === 'winter'){ ctx.fillStyle = 'rgba(242,236,255,.5)'; for (let i = 0; i < 40; i++){ const y = HZ + 2 + ((i * 37) % (H - HZ - 2)), x = (i * 53 + Math.floor(G.dist * 18 / (1 + (y - HZ) * 0.05))) % W; ctx.fillRect(x, y, 1, 1); } }
+  if (PAL.vine.season === 'winter'){
+    for (let i = 0; i < 40; i++){ const y = HZ + 2 + ((i * 37) % (H - HZ - 2)), x = (i * 53 + Math.floor(d * 18 / (1 + (y - HZ) * 0.05))) % W; buf[(y - HZ - 1) * W + x] = GF[y]; }
+  }
+  ctx.putImageData(GROUND, ox, HZ + 1 + oy);
 }
 function drawSlam(){
   const b = G.boss; if (!b || !b.slam || b.slam.ph !== 'aim') return;
@@ -1398,15 +1455,21 @@ function drawFarRows(){
   ctx.beginPath();
   for (const X of ROWS){ proj(X, 1.15, 3); const x1 = PX, y1 = PY; proj(X, 1.15, zf); ctx.moveTo(x1, y1); ctx.lineTo(PX, PY); }
   ctx.stroke();
-  const winter = PAL.vine.season === 'winter';
+  const winter = PAL.vine.season === 'winter', top = winter ? 0.9 : 1.35, kn = FOC / zn, kf = FOC / zf;
+  const yb = HZ + CAM * kn, yt = HZ + (CAM - top) * kn, yfb = HZ + CAM * kf, yft = HZ + (CAM - top) * kf;
+  ctx.fillStyle = winter ? PAL.vine.trunk : PAL.vine.leafA;
+  ctx.beginPath();
   for (const X of ROWS){
-    proj(X - 0.35, 0, zn); const a = [PX, PY]; proj(X - 0.35, winter ? 0.9 : 1.35, zn); const b = [PX, PY];
-    proj(X + 0.35, winter ? 0.9 : 1.35, zn); const c2 = [PX, PY]; proj(X + 0.35, 0, zn); const d = [PX, PY];
-    proj(X, winter ? 0.9 : 1.35, zf); const e = [PX, PY]; proj(X, 0, zf); const f = [PX, PY];
-    ctx.fillStyle = winter ? PAL.vine.trunk : PAL.vine.leafA;
-    ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.lineTo(e[0], e[1]); ctx.lineTo(c2[0], c2[1]); ctx.lineTo(d[0], d[1]); ctx.lineTo(f[0], f[1]); ctx.closePath(); ctx.fill();
-    ctx.strokeStyle = PAL.vine.rim; ctx.globalAlpha = 0.8; ctx.beginPath(); ctx.moveTo(b[0], b[1]); ctx.lineTo(e[0], e[1]); ctx.moveTo(c2[0], c2[1]); ctx.lineTo(e[0], e[1]); ctx.stroke(); ctx.globalAlpha = 1;
+    const xl = W / 2 + (X - 0.35 - G.camX) * kn, xr = W / 2 + (X + 0.35 - G.camX) * kn, xf = W / 2 + (X - G.camX) * kf;
+    ctx.moveTo(xl, yb); ctx.lineTo(xl, yt); ctx.lineTo(xf, yft); ctx.lineTo(xr, yt); ctx.lineTo(xr, yb); ctx.lineTo(xf, yfb); ctx.closePath();
   }
+  ctx.fill();
+  ctx.strokeStyle = PAL.vine.rim; ctx.globalAlpha = 0.8; ctx.beginPath();
+  for (const X of ROWS){
+    const xl = W / 2 + (X - 0.35 - G.camX) * kn, xr = W / 2 + (X + 0.35 - G.camX) * kn, xf = W / 2 + (X - G.camX) * kf;
+    ctx.moveTo(xl, yt); ctx.lineTo(xf, yft); ctx.moveTo(xr, yt); ctx.lineTo(xf, yft);
+  }
+  ctx.stroke(); ctx.globalAlpha = 1;
 }
 function drawPlantsAt(i, Z){
   const k = FOC / Z, by = HZ + CAM * k, h = Math.max(2, Math.round(1.55 * k));
@@ -1415,12 +1478,14 @@ function drawPlantsAt(i, Z){
     const sx = W / 2 + (ROWS[r] - G.camX) * k;
     if (sx < -h || sx > W + h) continue;
     const v = ((i * 7 + r * 13) >>> 0) % 3;
-    const spr = plantSprite(h, v);
+    const sp = plantSprite(h, v);
     if (post){ ctx.fillStyle = PAL.vine.trunk; ctx.fillRect(Math.round(sx - pw / 2), Math.round(by - ph), pw, ph); }
-    ctx.drawImage(spr, Math.round(sx - spr.width / 2), Math.round(by - h));
+    ctx.drawImage(sp.cv, sp.x, sp.y, sp.w, sp.h, Math.round(sx - sp.w / 2), Math.round(by - h), sp.w, sp.h);
   }
 }
-const dyn = [];
+const dyn = [], dynPool = [], byDepth = (a, b) => b.z - a.z;
+function pushDyn(z, k, o){ let it = dynPool[dyn.length]; if (!it) it = dynPool[dyn.length] = { z:0, k:0, o:null }; it.z = z; it.k = k; it.o = o; dyn.push(it); }
+function drawDyn(it){ const k = it.k; if (k === 1) drawEnt(it.o, it.z); else if (k === 2) drawShot(it.o, it.z); else if (k === 3) drawPart(it.o, it.z); else if (k === 4) drawPlayer(); else drawBoss(it.z); }
 function drawSprite(cv, x, y, Z, nomZ){
   const s = nomZ / Z; proj(x, y, Z);
   const w = Math.max(1, Math.round(cv.width * s)), h = Math.max(1, Math.round(cv.height * s));
@@ -1456,21 +1521,20 @@ function drawBoss(Z){
 }
 function drawWorld(){
   dyn.length = 0;
-  for (const e of G.ents){ const Z = e.wz - G.dist; if (Z > 1.3 && Z < 72) dyn.push([Z, 1, e]); }
-  for (const s of G.shots){ const Z = s.wz - G.dist; if (Z > 1.3 && Z < 72) dyn.push([Z, 2, s]); }
-  for (const q of G.parts){ const Z = q.wz - G.dist; if (Z > 1.3 && Z < 72) dyn.push([Z, 3, q]); }
-  dyn.push([PZ, 4, null]);
-  if (G.boss){ const Z = G.boss.zr; if (Z > 1.3) dyn.push([Z, 5, null]); }
-  dyn.sort((a, b) => b[0] - a[0]);
+  for (const e of G.ents){ const Z = e.wz - G.dist; if (Z > 1.3 && Z < 72) pushDyn(Z, 1, e); }
+  for (const s of G.shots){ const Z = s.wz - G.dist; if (Z > 1.3 && Z < 72) pushDyn(Z, 2, s); }
+  for (const q of G.parts){ const Z = q.wz - G.dist; if (Z > 1.3 && Z < 72) pushDyn(Z, 3, q); }
+  pushDyn(PZ, 4, null);
+  if (G.boss && G.boss.zr > 1.3) pushDyn(G.boss.zr, 5, null);
+  dyn.sort(byDepth);
   let di = 0;
   const iFar = Math.floor((G.dist + ZPL) / SP), iNear = Math.ceil((G.dist + Math.max(2.1, ZB - 0.8)) / SP);
-  const drawD = it => { const k = it[1]; if (k === 1) drawEnt(it[2], it[0]); else if (k === 2) drawShot(it[2], it[0]); else if (k === 3) drawPart(it[2], it[0]); else if (k === 4) drawPlayer(); else drawBoss(it[0]); };
   for (let i = iFar; i >= iNear; i--){
     const Z = i * SP - G.dist;
-    while (di < dyn.length && dyn[di][0] >= Z) drawD(dyn[di++]);
+    while (di < dyn.length && dyn[di].z >= Z) drawDyn(dyn[di++]);
     drawPlantsAt(i, Z);
   }
-  while (di < dyn.length) drawD(dyn[di++]);
+  while (di < dyn.length) drawDyn(dyn[di++]);
   for (const f of G.floats){ const Z = f.wz - G.dist; if (Z < 1.5) continue; proj(f.x, f.y, Z); text(f.txt, PX, Math.round(PY), { align:'center', font:3, color:f.col }); }
 }
 const scoreStr = () => String(Math.max(0, Math.floor(G.score))).padStart(8, '0') + '€';
@@ -1503,11 +1567,10 @@ function drawHUD(){
   // SMS
   if (G.sms){
     const s = G.sms, slide = Math.min(1, (5 - s.t) * 4, s.t * 4), x = Math.round(-150 + slide * 156), y = 46;
-    const lines = wrapToks(richTokens(s.msg, '#efe4fa'), 128, 3);
-    const h = 13 + lines.length * 7;
+    const lines = s.lines, h = 13 + lines.length * 7;
     ctx.fillStyle = P.ink; ctx.fillRect(x - 1, y - 1, 140, h + 2); ctx.fillStyle = '#21103a'; ctx.fillRect(x, y, 138, h); ctx.fillStyle = '#ff3d8b'; ctx.fillRect(x, y, 2, h);
     text('SMS · ' + s.from, x + 6, y + 3, { font:3, color:'#ff9a5a', shadow:null });
-    lines.forEach((ln, i) => drawToks(ln, x + 6, y + 11 + i * 7, 3, 1, null, null));
+    for (let i = 0; i < lines.length; i++){ const l = lines[i]; ctx.drawImage(l.cv, x + 6 - l.ox, y + 11 + i * 7 - l.oy); }
   }
   // barre de boss (en bas)
   if (G.boss && G.boss.enter <= 0){
@@ -1518,8 +1581,8 @@ function drawHUD(){
   }
   // sous-titres
   if (G.sub){
-    const lines = wrapToks(G.sub.toks, 236, 5), base = (G.boss && G.boss.enter <= 0 ? H - 40 : H - 14) - (lines.length - 1) * 11;
-    lines.forEach((ln, i) => { const w = toksW(ln, 5); drawToks(ln, Math.round(W / 2 - w / 2), base + i * 11, 5, 1, P.ink, null); });
+    const lines = G.sub.lines, base = (G.boss && G.boss.enter <= 0 ? H - 40 : H - 14) - (lines.length - 1) * 11;
+    for (let i = 0; i < lines.length; i++){ const l = lines[i]; ctx.drawImage(l.cv, Math.round(W / 2 - l.w / 2) - l.ox, base + i * 11 - l.oy); }
   }
   // bandeaux
   if (G.banner){
@@ -1533,7 +1596,7 @@ function render(){
   const sh = G.shake > 0 ? G.shake : 0;
   const ox = sh ? Math.round(rand(-sh, sh) * 0.5) : 0, oy = sh ? Math.round(rand(-sh, sh) * 0.5) : 0;
   ctx.save(); ctx.translate(ox, oy);
-  drawSky(); drawGround(); drawSlam(); drawFarRows(); drawWorld();
+  drawSky(); drawGround(ox, oy); drawSlam(); drawFarRows(); drawWorld();
   ctx.restore();
   drawHUD();
   if (G.flash > 0){ ctx.globalAlpha = Math.min(0.75, G.flash * 1.6); ctx.fillStyle = G.flashCol; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; }
@@ -1550,6 +1613,7 @@ function showOv(id){
   for (const o of OVS) $(o).hidden = o !== id;
   ovAt = performance.now();
   $('app').inert = !!id;
+  G.cover = !!id && id !== 'ov-title'; G.dirty = true;
   if (id){ const b = $(id).querySelector('.btn-main'); if (b) setTimeout(() => { try { b.focus({ preventScroll:true }); } catch(e){} }, 30); }
 }
 function fmtEur(n){ return Math.floor(n).toLocaleString('fr-FR').replace(/\s/g, ' ') + ' €'; }
@@ -1755,9 +1819,10 @@ function frame(now){
   requestAnimationFrame(frame);
   let dt = (now - last) / 1000; last = now; if (dt > 0.1) dt = 0.1; if (dt < 0) dt = 0;
   G.rt += dt;
+  if (G.cover){ pollGamepad(); acc = 0; if (G.dirty){ G.dirty = false; render(); } return; } // écran opaque par-dessus : on ne calcule plus rien
   if (G.state !== 'pause' && G.state !== 'over' && G.state !== 'win'){
     acc += dt; let n = 0;
-    while (acc >= STEP && n < 6){ pollGamepad(); G.t += STEP; if (G.state === 'play') play(STEP); else if (G.state === 'title' || G.state === 'brief') attract(STEP); else break; acc -= STEP; n++; }
+    while (acc >= STEP && n < 6){ pollGamepad(); if (G.state === 'play') play(STEP); else if (G.state === 'title' || G.state === 'brief') attract(STEP); else break; acc -= STEP; n++; }
   } else { acc = 0; pollGamepad(); }
   render();
 }
@@ -1768,6 +1833,7 @@ buildScene('sunset');
 fitAll(); updatePadUI(); refreshTitle(); fillPromo(); $('app').inert = true;
 requestAnimationFrame(frame);
 window.AVDJ = { G, MISSIONS, FAM, startMission, showBrief, startBoss, gameOver, victory, hop, jump, setWeapon, useBomb,
-  step(n){ for (let i = 0; i < n; i++){ G.t += STEP; G.rt += STEP; if (G.state === 'play') play(STEP); else break; } } }; // banc de test (QA)
+  step(n){ for (let i = 0; i < n; i++){ G.rt += STEP; if (G.state === 'play') play(STEP); else break; } },
+  bench(n){ const t0 = performance.now(); for (let i = 0; i < n; i++){ G.rt += STEP; if (G.state === 'play') play(STEP); render(); } return (performance.now() - t0) / n; } }; // banc de test (QA)
 })();
 </script>

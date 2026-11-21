@@ -52,3 +52,27 @@
 **À signaler à Teddy**
 - « Les DAES à chaque facture à l'export » : hors UE, c'est un DAE (le DAES sert dans l'UE en droits acquittés). « DAE et DSA confondus » : non, régimes différents, seul GAMMA 2 est commun.
 - « Le fisc, la TVA, la compta, c'est Vitisoft » : le jeu dit seulement ce qui est sourcé (export des écritures vers le comptable). La publicité Meta « Vitisoft, animation boucle » montre « Déclaration TVA » et « Valider la TVA mensuelle » sans source.
+
+## 21/11/2026 · V3 : optimisation et nettoyage
+
+**Demande de Teddy** : rendre le jeu le plus léger possible sans perdre en qualité, nettoyer le code.
+
+**Mesures (Chrome headless sur Mac, coût de calcul d'une image en jeu)**
+| | Avant | Après |
+|---|---|---|
+| Téléphone portrait | 2,3 ms | 0,7 ms (moins 70 %) |
+| Ordinateur | 1,3 ms | 0,4 ms (moins 68 %) |
+| Fichier livré | 127 Ko (40 Ko compressé) | 93 Ko (34 Ko compressé) |
+
+**Ce qui a changé**
+- Sol : écrit pixel par pixel puis envoyé en une fois, au lieu d'environ 6 000 appels de dessin par image sur téléphone.
+- Textes du HUD : chaque texte est rendu une fois en petite image (de 0,3 à 0,6 ms par image à 0,01 ms).
+- Ceps : rangés sur une planche unique (atlas), préparés en tâche de fond dès le briefing.
+- Plus aucune allocation mémoire par image (fini les à-coups du ramasse-miettes sur téléphone).
+- Rien n'est calculé derrière les écrans opaques (briefing, pause, fin) : économie de batterie.
+- Musique non programmée quand le son est coupé.
+- Polices Poppins : 3 graisses chargées au lieu de 5.
+- Build minifié avec esbuild (dépendance de développement).
+- Code mort retiré (alias, variables et caches inutilisés).
+
+**Vérifié** : rendu identique sur captures (ordinateur, téléphone portrait et paysage, tablette), aucune erreur console, gestes et boutons OK, équilibrage inchangé (robot).
