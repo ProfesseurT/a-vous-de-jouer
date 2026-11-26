@@ -208,7 +208,7 @@ Demande de Teddy : le pixel Meta dans le jeu, derrière la même fenêtre de con
 - Revenir sur son choix : petit bouton « Cookies » sur l'accueil (après « Par l'équipe Solumatic... » ; seul sur sa ligne sur téléphone) et dans la pause. Refuser après avoir accepté efface `_fbp` et `_fbc` sur l'adresse exacte (professeurt.github.io, avec et sans point ; github.io est un suffixe public) et recharge la page.
 - Choix rangé sous `avdj_meta_consent` (pas la clé des LP : toutes les pages de professeurt.github.io partagent le même stockage).
 
-**Deux phrases adaptées, à valider par Teddy** (règle de vérité : les textes des LP seraient faux dans le jeu)
+**Deux phrases adaptées, validées par Teddy le 26/11/2026** (règle de vérité : les textes des LP seraient faux dans le jeu)
 - « Quoi » : « un identifiant de navigateur (cookies _fbp et _fbc, 90 jours) et les pages vues ici ». Retiré : « et le clic sur « Réserver mon tarif » », que le jeu ne suit pas.
 - « Vos droits » : « avec le bouton « Cookies » de l'accueil ou de la pause » au lieu de « avec le lien « Cookies » en bas de page ».
 
