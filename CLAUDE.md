@@ -32,7 +32,7 @@ Première fois : `npm install`. Après toute modification de `src/jeu.html` : `n
 
 ## Conception (pour reprendre le code)
 
-- Écran interne 256 x 224 sur ordinateur et tablette ; sur téléphone, adapté à la forme de l'écran pour le remplir (`setRes`), sans boutons, aux gestes, outil choisi tout seul (`autoWeapon`). Agrandi sans lissage. Vue pseudo-3D : 5 allées (`LANE_X`), rangs de vigne entre elles, caméra à 3 m, joueur à 8 m devant (`PZ`).
+- Écran interne 256 x 224 sur ordinateur et tablette ; sur téléphone, adapté à la forme de l'écran pour le remplir (`setRes`), sans boutons, aux gestes. Partout, l'outil se choisit tout seul selon la couleur de l'ennemi visé (`autoWeapon`) : ni touches 1 2 3, ni boutons d'outil (retour de Teddy du 26/11 : « pas jouable sinon »). Agrandi sans lissage. Vue pseudo-3D : 5 allées (`LANE_X`), rangs de vigne entre elles, caméra à 3 m, joueur à 8 m devant (`PZ`).
 - Personnage au choix sur l'accueil : vigneron ou vigneronne (`SPR.heroes`, choix mémorisé dans le navigateur). Textes neutres ou accordés : jamais « le vigneron » seul.
 - Une couleur = un outil : rose Viticode, orange Vitisoft, cyan Registre phyto, blanc n'importe lequel. Le bureau = bombe qui range l'écran.
 - Barrières NORME (4 rangs sur 5, un trou) : au choix, passer par le trou (sûr) ou sauter par-dessus (saut à placer environ 0,15 à 0,55 s avant, bonus 150 €). Retour de Teddy du 21/11. Barrière de 18 px, franchie si le saut dépasse 85 % de sa hauteur, même règle que les dossiers au sol.

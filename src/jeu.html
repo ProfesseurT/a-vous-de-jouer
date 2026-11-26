@@ -38,7 +38,7 @@ body{margin:0;background:var(--ink);color:var(--text);font-family:var(--body);ov
 .coarse .pad{display:grid}
 .coarse.landscape #app{grid-template-columns:auto 1fr auto;grid-template-rows:1fr;grid-template-areas:"padl stage padr"}
 #pad-l{grid-area:padl;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto 1fr;align-content:end}
-#pad-r{grid-area:padr;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:auto 1fr;align-content:end}
+#pad-r{grid-area:padr;grid-template-columns:repeat(3,minmax(0,1fr));align-content:end}
 .coarse.phone #app,.coarse.landscape.phone #app{grid-template-columns:1fr;grid-template-rows:1fr;grid-template-areas:"stage";gap:0;
   padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px);background:var(--ink)}
 .phone .pad,.phone #brand{display:none!important}
@@ -53,10 +53,6 @@ body{margin:0;background:var(--ink);color:var(--text);font-family:var(--body);ov
 #b-pause{grid-column:1/3;min-height:34px;font-size:12px}
 #b-jump{grid-column:2/4;font-size:16px;letter-spacing:.12em;border-color:var(--orange-soft)}
 #b-bomb{font-size:10px;border-color:rgba(255,255,255,.55)}
-.wbtn[data-w="0"]{color:#ff8fbf;border-color:#ff3d8b}
-.wbtn[data-w="1"]{color:#ffb27a;border-color:#ff8a3d}
-.wbtn[data-w="2"]{color:#8deeff;border-color:#4fe3ff}
-.wbtn.on{background:var(--badge);box-shadow:inset 0 0 0 2px currentColor}
 .pbtn.locked{opacity:.3}
 /* Écrans (titre, mission, fin) : reprennent l'email et la landing « À vous de jouer » */
 .ov{position:fixed;inset:0;z-index:20;display:flex;overflow-y:auto;overscroll-behavior:contain;
@@ -145,9 +141,6 @@ textarea.share{width:100%;box-sizing:border-box;min-height:84px;background:var(-
   </div>
   <div id="stage"><p id="brand" aria-hidden="true"><small>Le jeu · Campagne 2027</small>À vous de jouer.</p><div id="screen"><canvas id="c" width="256" height="224" role="img" aria-label="Écran de jeu : un vigneron court dans les rangs de vigne"></canvas></div></div>
   <div id="pad-r" class="pad">
-    <button class="pbtn wbtn" data-w="0" type="button">VITICODE</button>
-    <button class="pbtn wbtn" data-w="1" type="button">VITISOFT</button>
-    <button class="pbtn wbtn" data-w="2" type="button">REGISTRE</button>
     <button class="pbtn" id="b-bomb" type="button">LE BUREAU</button>
     <button class="pbtn big" id="b-jump" type="button">SAUT</button>
   </div>
@@ -178,11 +171,11 @@ textarea.share{width:100%;box-sizing:border-box;min-height:84px;background:var(-
     <dl class="keys">
       <dt>← →  ou  Q D</dt><dd>Sauter d'un rang de vigne à l'autre</dd>
       <dt>↑  ou  Espace</dt><dd>Sauter par-dessus les dossiers au sol</dd>
-      <dt>1 2 3  ou  E</dt><dd>Changer d'outil (le tir est automatique)</dd>
+      <dt>Outil</dt><dd>Se choisit tout seul selon la couleur de l'ennemi visé (le tir est automatique)</dd>
       <dt>B  ou  ↓</dt><dd>Le bureau : range tout l'écran d'un coup</dd>
       <dt>Échap  ·  M</dt><dd>Pause · couper le son</dd>
       <dt>Tactile</dt><dd>Glissez à gauche ou à droite, vers le haut pour sauter, ou utilisez les boutons</dd>
-      <dt>Manette</dt><dd>Croix ou stick, A saut, B bureau, gâchettes pour les outils</dd>
+      <dt>Manette</dt><dd>Croix ou stick, A saut, B bureau</dd>
     </dl>
     <div class="legend">
       <span><i style="background:#ff3d8b"></i>Rose : Viticode</span>
@@ -278,11 +271,11 @@ const PREVENTE_FIN = Date.UTC(2026, 11, 31, 23, 0, 0); // 1er janvier 2027, 0 h,
 const EN_PREVENTE = Date.now() < PREVENTE_FIN;
 
 const WEAPONS = [
-  { name:'VITICODE', short:'VITICODE', c:'#ff3d8b', key:'1',
+  { name:'VITICODE', short:'VITICODE', c:'#ff3d8b',
     desc:"Génère vos QR codes nutritionnels, gratuitement. 3 500 comptes." },
-  { name:'VITISOFT', short:'VITISOFT', c:'#ff8a3d', key:'2',
+  { name:'VITISOFT', short:'VITISOFT', c:'#ff8a3d',
     desc:"Calcule votre DRM depuis vos ventes et vos stocks (vous la validez dans CIEL) et génère vos DAE et DAES sur GAMMA 2 depuis vos factures. 2 000 domaines." },
-  { name:'REGISTRE PHYTO', short:'REGISTRE', c:'#4fe3ff', key:'3',
+  { name:'REGISTRE PHYTO', short:'REGISTRE', c:'#4fe3ff',
     desc:"Notre application, ouverture le 1er janvier 2027 : traitements saisis sur le téléphone, même sans réseau, au format du ministère." },
 ];
 
@@ -300,7 +293,7 @@ const MISSIONS = [
     mix:[['drm',4],['dae',2],['daes',2],['tampon',2],['label',2],['cerfa',1]],
     fact:"La DRM chaque mois, au plus tard le 10, même sans mouvement. Et un document par envoi : DAE en suspension de droits ou à l'export, DSA en droits acquittés en France, DAES vers un professionnel de l'UE. Tout passe par GAMMA 2 depuis le 26 juin 2025.",
     unlock:{ w:1 },
-    tip:'<b style="color:#ffb27a">Les ennemis orange</b> ne craignent que Vitisoft {{2}}. Gardez Viticode pour les roses.',
+    tip:'<b style="color:#ffb27a">Les ennemis orange</b> ne craignent que Vitisoft. L\'outil se choisit tout seul selon la couleur de l\'ennemi visé.',
     radio:'RADIO RANG FM · TAMPON DE MINUIT',
     sms:[["LES DOUANES","Rappel : DRM avant le 10."],["LE BANQUIER","On peut faire un point cette semaine ?"]] },
   { short:'LE FISC', title:'Le fisc', date:'1er septembre 2026', pal:'night', length:660,
@@ -316,7 +309,7 @@ const MISSIONS = [
     mix:[['carnet',4],['stat',2],['classeur',1],['tva',1],['drm',1],['label',1]],
     fact:"Le 1er janvier 2027, le registre phyto passe au format numérique. Le papier reste toléré jusqu'en 2029, à convertir en numérique avant le 31 janvier de l'année suivante. À conserver au moins 5 ans.",
     unlock:{ w:2 },
-    tip:'<b style="color:#8deeff">Les ennemis cyan</b> ne craignent que le Registre phyto {{3}}. Et tout ce que vous avez appris avant.',
+    tip:'<b style="color:#8deeff">Les ennemis cyan</b> ne craignent que le Registre phyto, choisi tout seul lui aussi. Et tout ce que vous avez appris avant.',
     radio:'RADIO RANG FM · PREMIER JANVIER',
     sms:[["LA CUMA","On traite chez toi jeudi. Tu notes ?"],["LE CHEF DE CULTURE","On traite demain matin si le vent tombe."]] },
 ];
@@ -1099,7 +1092,7 @@ function buildScript(mi){
     hint(122, 'LES ROSES NE CRAIGNENT QUE {p}VITICODE{/}. NE LES LAISSEZ PAS PASSER.');
   } else if (mi === 1){
     ent(64, 'drm', 'p');
-    hint(14, phone ? 'NOUVEAU : {o}VITISOFT{/}, CHOISI TOUT SEUL CONTRE LES ENNEMIS ORANGE.' : 'NOUVEAU : {o}VITISOFT{/}. ' + (touch ? 'BOUTON VITISOFT' : 'TOUCHE {o}2{/}') + ' POUR LES ENNEMIS ORANGE.', 4);
+    hint(14, 'NOUVEAU : {o}VITISOFT{/}, CHOISI TOUT SEUL CONTRE LES ENNEMIS ORANGE.', 4);
     wall(86);
     hint(70, 'UNE {r}NORME{/} : SAUTEZ PAR-DESSUS OU PASSEZ PAR LE TROU.');
     hint(110, 'DAE, DSA, DAES : UN DOCUMENT PAR ENVOI, TOUT SUR {o}GAMMA 2{/}.', 3.6);
@@ -1111,7 +1104,7 @@ function buildScript(mi){
     hint(96, 'LA {o}TVA{/} ? {o}VITISOFT{/} L\'ENVOIE DANS LE JOURNAL DES VENTES DE VOTRE COMPTABLE.', 3.8);
   } else if (mi === 3){
     ent(64, 'carnet', 'p');
-    hint(14, phone ? 'NOUVEAU : {c}REGISTRE PHYTO{/}, CHOISI TOUT SEUL CONTRE LES ENNEMIS CYAN.' : 'NOUVEAU : {c}REGISTRE PHYTO{/}. ' + (touch ? 'BOUTON REGISTRE' : 'TOUCHE {c}3{/}') + ' POUR LES ENNEMIS CYAN.', 4);
+    hint(14, 'NOUVEAU : {c}REGISTRE PHYTO{/}, CHOISI TOUT SEUL CONTRE LES ENNEMIS CYAN.', 4);
     ent(96, 'stat', 1);
     hint(66, '{c}STAT\'PHYTO{/} VOUS SUIT : ELLE DEVIENT ANNUELLE EN 2028.', 3.6);
   }
@@ -1151,7 +1144,7 @@ function spawnWave(wz){
 }
 function shuffleLanes(){ const a = [0, 1, 2, 3, 4]; for (let i = 4; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 
-/* Sur téléphone, l'outil se choisit tout seul selon la couleur de l'ennemi visé (jeu fluide, sans bouton). */
+/* Partout (téléphone, tablette, ordinateur), l'outil se choisit tout seul selon la couleur de l'ennemi visé : le joueur ne gère que le rang et le saut. */
 function autoWeapon(){
   let best = -1, bz = 1e9;
   for (const e of G.ents){
@@ -1160,7 +1153,7 @@ function autoWeapon(){
     const sc = Z + (Math.abs(e.x - G.p.x) < 1.2 ? 0 : 1000); if (sc < bz){ bz = sc; best = w; }
   }
   if (G.boss && G.boss.enter <= 0 && Math.abs(G.boss.x - G.p.x) < 2.8 && bz >= 1000){ const w = FAM[G.boss.fam].w; if (w >= 0 && G.weapons[w]) best = w; }
-  if (best >= 0 && best !== G.weapon){ G.weapon = best; updatePadUI(); }
+  if (best >= 0) G.weapon = best;
 }
 
 /* ---------- effets ---------- */
@@ -1183,8 +1176,6 @@ function hop(dir){
   p.hopFrom = p.x; p.lane = nl; p.hopTo = LANE_X(nl); p.hopT = 0; SND.fx('hop');
 }
 function jump(){ const p = G.p; if (p.jy <= 0.001 && p.vy === 0){ p.vy = 7.1; SND.fx('jump'); } }
-function setWeapon(i){ if (i < 0 || i > 2 || !G.weapons[i] || G.weapon === i) return; G.weapon = i; SND.fx('sw'); updatePadUI(); }
-function cycleWeapon(dir){ for (let k = 1; k <= 3; k++){ const i = (G.weapon + dir * k + 3) % 3; if (G.weapons[i]){ setWeapon(i); return; } } }
 function useBomb(){
   if (G.state !== 'play' || !G.bombOk) return;
   if (G.bombs <= 0){ tipOnce('nobomb', 'PLUS DE {w}BUREAU{/} : RAMASSEZ LES ICÔNES DE BUREAU.'); return; }
@@ -1220,9 +1211,6 @@ function hitEnt(e, s){
 function wrongWeapon(x, wz, y, famKey){
   SND.fx('bonk'); burst(x, wz, y + 0.8, ['#ffffff', '#8a7aa8'], 4, 1.6); G.combo = 0;
   if (G.wrongT <= 0){ float(x, wz, y + 1.6, 'PAS LE BON OUTIL', '#ff9ab8'); G.wrongT = 0.9; }
-  const w = FAM[famKey].w, wn = WEAPONS[w], col = ['p', 'o', 'c'][w];
-  const how = G.coarse ? 'BOUTON ' + wn.short : 'TOUCHE {' + col + '}' + wn.key + '{/}';
-  if (G.weapons[w]) tipOnce('wrong' + w, 'IL FAUT {' + col + '}' + wn.name + '{/} : ' + how + '.', 3.4);
 }
 function hurt(){
   const p = G.p; if (p.inv > 0 || p.tractor > 0) return;
@@ -1378,7 +1366,7 @@ function play(dt){
   if (G.comboT > 0){ G.comboT -= dt; if (G.comboT <= 0) G.combo = 0; }
   G.fireT -= dt;
   if (G.fireT <= 0 && p.tractor <= 0 && G.phase !== 'done'){
-    if (G.phone) autoWeapon();
+    autoWeapon();
     G.fireT = 0.2; G.shots.push({ x:p.x, wz:G.dist + PZ + 0.6, prev:G.dist + PZ + 0.6, y:1.0 + p.jy + p.hopY * 0.6, w:G.weapon }); SND.fx('shoot', G.weapon);
   }
   // entités
@@ -1664,7 +1652,7 @@ function showBrief(i){
   const u = m.unlock;
   if (u.w !== undefined){ $('br-img').src = ICON['w' + u.w].toDataURL(); $('br-wname').textContent = WEAPONS[u.w].name; $('br-wdesc').textContent = WEAPONS[u.w].desc; }
   else { $('br-img').src = ICON.bomb.toDataURL(); $('br-wname').textContent = BOMB_INFO.name; $('br-wdesc').textContent = BOMB_INFO.desc; }
-  const KL = { '2':['touche 2','bouton VITISOFT','choisi tout seul'], '3':['touche 3','bouton REGISTRE','choisi tout seul'], 'B':['touche B','bouton LE BUREAU','glissez vers le bas'] };
+  const KL = { 'B':['touche B','bouton LE BUREAU','glissez vers le bas'] };
   const dv = { desk:0, tablet:1, phone:2 }[device()];
   $('br-tip').innerHTML = m.tip.replace(/\{\{(\w)\}\}/g, (_, k) => '(' + KL[k][dv] + ')');
   const how = $('br-how'); how.hidden = i !== 0; how.innerHTML = HOW[device()].map(r => '<b>' + esc(r[0]) + '</b><span>' + esc(r[1]) + '</span>').join('');
@@ -1726,10 +1714,8 @@ let cheat = '';
 function onAction(a){
   if (G.state !== 'play') return;
   if (a === 'left') hop(-1); else if (a === 'right') hop(1); else if (a === 'jump') jump(); else if (a === 'bomb') useBomb();
-  else if (a === 'w0') setWeapon(0); else if (a === 'w1') setWeapon(1); else if (a === 'w2') setWeapon(2); else if (a === 'cycle') cycleWeapon(1); else if (a === 'cycleb') cycleWeapon(-1);
 }
-const KEYMAP = { ArrowLeft:'left', KeyA:'left', ArrowRight:'right', KeyD:'right', ArrowUp:'jump', KeyW:'jump', Space:'jump', ArrowDown:'bomb', KeyS:'bomb', KeyB:'bomb',
-  Digit1:'w0', Numpad1:'w0', Digit2:'w1', Numpad2:'w1', Digit3:'w2', Numpad3:'w2', KeyE:'cycle', Tab:'cycle' };
+const KEYMAP = { ArrowLeft:'left', KeyA:'left', ArrowRight:'right', KeyD:'right', ArrowUp:'jump', KeyW:'jump', Space:'jump', ArrowDown:'bomb', KeyS:'bomb', KeyB:'bomb' };
 window.addEventListener('keydown', e => {
   if (e.key && e.key.length === 1){ cheat = (cheat + e.key.toUpperCase()).slice(-12); checkCheat(); }
   if (e.key === 'Escape' || e.code === 'KeyP'){ if (G.state === 'play'){ pause(); e.preventDefault(); return; } if (G.state === 'pause'){ resume(); e.preventDefault(); return; } if (!$('ov-help').hidden){ closeHelp(); return; } }
@@ -1770,9 +1756,7 @@ function bindBtn(id, a){
 }
 bindBtn('b-left', () => onAction('left')); bindBtn('b-right', () => onAction('right')); bindBtn('b-jump', () => onAction('jump'));
 bindBtn('b-bomb', () => onAction('bomb')); bindBtn('b-pause', () => { if (G.state === 'play') pause(); else if (G.state === 'pause') resume(); });
-document.querySelectorAll('.wbtn').forEach(b => bindBtn.call(null, b.id || (b.id = 'wb' + b.dataset.w), () => onAction('w' + b.dataset.w)));
 function updatePadUI(){
-  document.querySelectorAll('.wbtn').forEach(b => { const w = +b.dataset.w; b.classList.toggle('on', w === G.weapon); b.classList.toggle('locked', !G.weapons[w]); });
   const bb = $('b-bomb'); bb.classList.toggle('locked', !G.bombOk); bb.textContent = G.bombOk ? 'LE BUREAU ×' + G.bombs : 'LE BUREAU';
 }
 // manette
@@ -1781,8 +1765,7 @@ function pollGamepad(){
   if (!navigator.getGamepads) return; let gp = null; try { gp = [...navigator.getGamepads()].find(Boolean); } catch(e){ return; } if (!gp) return;
   const ax = gp.axes[0] || 0, ay = gp.axes[1] || 0;
   const st = { left:ax < -0.5 || (gp.buttons[14] && gp.buttons[14].pressed), right:ax > 0.5 || (gp.buttons[15] && gp.buttons[15].pressed),
-    jump:(gp.buttons[0] && gp.buttons[0].pressed) || ay < -0.6 || (gp.buttons[12] && gp.buttons[12].pressed), bomb:(gp.buttons[1] && gp.buttons[1].pressed) || (gp.buttons[13] && gp.buttons[13].pressed),
-    cycleb:(gp.buttons[4] && gp.buttons[4].pressed) || (gp.buttons[6] && gp.buttons[6].pressed), cycle:(gp.buttons[5] && gp.buttons[5].pressed) || (gp.buttons[7] && gp.buttons[7].pressed), start:gp.buttons[9] && gp.buttons[9].pressed };
+    jump:(gp.buttons[0] && gp.buttons[0].pressed) || ay < -0.6 || (gp.buttons[12] && gp.buttons[12].pressed), bomb:(gp.buttons[1] && gp.buttons[1].pressed) || (gp.buttons[13] && gp.buttons[13].pressed), start:gp.buttons[9] && gp.buttons[9].pressed };
   for (const k in st){ if (st[k] && !padPrev[k]){ if (k === 'start'){ if (G.state === 'play') pause(); else if (G.state === 'pause') resume(); else { const b = document.querySelector('.ov:not([hidden]) button.btn-main') || document.querySelector('.ov:not([hidden]) button'); if (b) b.click(); } } else onAction(k); } }
   padPrev = st;
 }
@@ -1790,13 +1773,13 @@ function pollGamepad(){
 /* ---------- consignes selon l'appareil ---------- */
 const HELP = {
   phone:[['Glisser ← →',"Sauter d'un rang de vigne à l'autre"],['Glisser ↑',"Sauter par-dessus les dossiers (ou toucher le milieu de l'écran)"],['Glisser ↓',"Le bureau : range tout l'écran d'un coup"],['Outil','Se choisit tout seul selon la couleur de l\'ennemi visé'],['II en haut','Pause']],
-  tablet:[['Glisser ← →  ou  ◀ ▶',"Sauter d'un rang de vigne à l'autre"],['Glisser ↑  ou  SAUT','Sauter par-dessus les dossiers au sol'],['VITICODE · VITISOFT · REGISTRE',"Changer d'outil (le tir est automatique)"],['LE BUREAU',"Range tout l'écran d'un coup"],['PAUSE','Pause']],
-  desk:[['← →  ou  Q D',"Sauter d'un rang de vigne à l'autre"],['↑  ou  Espace','Sauter par-dessus les dossiers au sol'],['1 2 3  ou  E',"Changer d'outil (le tir est automatique)"],['B  ou  ↓',"Le bureau : range tout l'écran d'un coup"],['Échap  ·  M','Pause · couper le son'],['Manette','Croix ou stick, A saut, B bureau, gâchettes pour les outils']],
+  tablet:[['Glisser ← →  ou  ◀ ▶',"Sauter d'un rang de vigne à l'autre"],['Glisser ↑  ou  SAUT','Sauter par-dessus les dossiers au sol'],['Outil',"Se choisit tout seul selon la couleur de l'ennemi visé (le tir est automatique)"],['LE BUREAU',"Range tout l'écran d'un coup"],['PAUSE','Pause']],
+  desk:[['← →  ou  Q D',"Sauter d'un rang de vigne à l'autre"],['↑  ou  Espace','Sauter par-dessus les dossiers au sol'],['Outil',"Se choisit tout seul selon la couleur de l'ennemi visé (le tir est automatique)"],['B  ou  ↓',"Le bureau : range tout l'écran d'un coup"],['Échap  ·  M','Pause · couper le son'],['Manette','Croix ou stick, A saut, B bureau']],
 };
 const HOW = {
   phone:[['Glisser ← →','changer de rang'],['Glisser ↑','sauter'],['Glisser ↓','le bureau'],['Outil','choisi tout seul']],
-  tablet:[['◀ ▶ ou glisser','changer de rang'],['SAUT ou glisser ↑','sauter'],['Boutons du bas',"changer d'outil"]],
-  desk:[['← →','changer de rang'],['↑ ou Espace','sauter'],['1 2 3',"changer d'outil"]],
+  tablet:[['◀ ▶ ou glisser','changer de rang'],['SAUT ou glisser ↑','sauter'],['Outil','choisi tout seul']],
+  desk:[['← →','changer de rang'],['↑ ou Espace','sauter'],['Outil','choisi tout seul']],
 };
 const device = () => G.phone ? 'phone' : G.coarse ? 'tablet' : 'desk';
 const esc = t => String(t).replace(/[&<>]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[c]));
@@ -1881,7 +1864,7 @@ initHeroes();
 buildScene('sunset');
 fitAll(); updatePadUI(); refreshTitle(); fillPromo(); $('app').inert = true;
 requestAnimationFrame(frame);
-window.AVDJ = { G, MISSIONS, FAM, startMission, showBrief, startBoss, gameOver, victory, hop, jump, setWeapon, useBomb,
+window.AVDJ = { G, MISSIONS, FAM, startMission, showBrief, startBoss, gameOver, victory, hop, jump, useBomb,
   step(n){ for (let i = 0; i < n; i++){ G.rt += STEP; if (G.state === 'play') play(STEP); else break; } },
   spawnAt(z){ SPAWN_Z = z; },
   bench(n){ const t0 = performance.now(); for (let i = 0; i < n; i++){ G.rt += STEP; if (G.state === 'play') play(STEP); render(); } return (performance.now() - t0) / n; } }; // banc de test (QA)

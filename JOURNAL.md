@@ -160,3 +160,13 @@ Demande : changer le nom des méchants, comme sur le rollup (« 4 missions, 3 ar
 - Inchangés : noms des petits ennemis (étiquette, DRM, DAE, TVA, carnet...), texte de partage et description de la page (« étiquetage, douanes, fisc, registre phyto »), image d'aperçu.
 
 Vérifié : fiche de mission 1, HUD et bandeau du boss final (navigateur, 390 x 844), aucune erreur console.
+
+## 26/11/2026 · Retour de Teddy : outil choisi tout seul partout
+
+Demande : « sur PC ou tablette ou partout, rends la sélection des armes automatique partout, c'est pas jouable sinon ».
+
+- L'outil se choisit tout seul selon la couleur de l'ennemi visé sur ordinateur, tablette et téléphone (avant : téléphone seulement). Le joueur ne gère plus que le rang, le saut et le bureau.
+- Retirés : boutons VITICODE, VITISOFT, REGISTRE de la tablette (il reste LE BUREAU et SAUT), touches 1 2 3, E et Tab, gâchettes de la manette.
+- Textes mis à jour : écran Commandes, consignes des missions 2 et 4, indices « NOUVEAU : VITISOFT / REGISTRE PHYTO, CHOISI TOUT SEUL », tableau des commandes de la mission 1. Retiré : l'indice « IL FAUT ... : TOUCHE 1 » (il affichait aussi « BOUTON ... » sur téléphone, où il n'y a pas de bouton). « PAS LE BON OUTIL » reste quand un tir déjà parti touche un ennemi d'une autre couleur.
+
+Vérifié (navigateur) : ordinateur 1280 x 800, robot sur la mission 4, les 3 outils servent, 99 contrôles « l'outil est celui de l'ennemi du rang » sur 99 ; tablette paysage 1024 x 768 et portrait 768 x 1024, boutons bien alignés ; téléphone 390 x 844 ; aucune erreur, y compris en appuyant sur 2.
