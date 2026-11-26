@@ -223,4 +223,6 @@ Demande de Teddy : le pixel Meta dans le jeu, derrière la même fenêtre de con
 
 Pendant les tests, les envois vers facebook.com ont été interceptés dans le navigateur de test : aucun faux événement n'est arrivé chez Meta. À savoir pour la suite : le pixel n'envoie rien depuis un navigateur qui se déclare « HeadlessChrome » (filtre anti-robots de Meta).
 
-**Pas testable ici** : la réception réelle des événements dans le gestionnaire d'événements Meta (à regarder après la mise en ligne, en acceptant depuis un vrai téléphone), et Safari iOS (qui limite à 7 jours les cookies posés par un script, `_fbp` compris).
+**Confirmé par Teddy le 26/11/2026** : après la mise en ligne, accord donné depuis un vrai téléphone, les événements arrivent bien dans le gestionnaire d'événements Meta.
+
+**Pas testable ici** : Safari iOS limite à 7 jours les cookies posés par un script, `_fbp` compris.
