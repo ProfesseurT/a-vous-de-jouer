@@ -170,3 +170,26 @@ Demande : « sur PC ou tablette ou partout, rends la sélection des armes automa
 - Textes mis à jour : écran Commandes, consignes des missions 2 et 4, indices « NOUVEAU : VITISOFT / REGISTRE PHYTO, CHOISI TOUT SEUL », tableau des commandes de la mission 1. Retiré : l'indice « IL FAUT ... : TOUCHE 1 » (il affichait aussi « BOUTON ... » sur téléphone, où il n'y a pas de bouton). « PAS LE BON OUTIL » reste quand un tir déjà parti touche un ennemi d'une autre couleur.
 
 Vérifié (navigateur) : ordinateur 1280 x 800, robot sur la mission 4, les 3 outils servent, 99 contrôles « l'outil est celui de l'ennemi du rang » sur 99 ; tablette paysage 1024 x 768 et portrait 768 x 1024, boutons bien alignés ; téléphone 390 x 844 ; aucune erreur, y compris en appuyant sur 2.
+
+## 26/11/2026 · Version téléphone plus fluide et optimisée
+
+Demande de Teddy : « améliorer le jeu en version mobile afin qu'il soit plus lissé, et optimisé à fond ».
+
+**Diagnostic** (téléphone simulé 390 x 844, densité 3, processeur ralenti x 4)
+- Cadence : la simulation tournait par pas fixes de 1/60 s, sans lien avec l'écran. Sur un écran à 90 Hz, une image sur trois était figée ; à 120 Hz, une sur deux. Même à 60 Hz, quelques images doublées.
+- Pixels : l'image de 224 pixels était agrandie de 5,22 fois. Un pixel du jeu faisait 5 ou 6 pixels de l'écran (49 sur 187 à 6), d'où une image qui « tremble » en défilant.
+- Près de l'horizon, les bandes du sol devenaient plus fines qu'un pixel et scintillaient.
+- Coût d'une image : 3,0 ms (sol 51 %, ceps 33 %, la simulation elle-même 2 %). Le score fabriquait une nouvelle petite image à chaque changement.
+
+**Fait**
+- Boucle : un pas de simulation par image affichée, de sa durée réelle. Irrégularité du défilement : 0,2 à 0,4 % à 60, 90 et 120 Hz (avant : 9 %, 71 %, 100 %).
+- Saut calculé d'après le temps écoulé : exactement la trajectoire d'avant à 60 images/s (écart 5e-15 m), la même à toutes les cadences. Fumée du tracteur et explosions du boss proportionnelles au temps.
+- Téléphone : échelle entière. La taille interne s'ajuste (234 x 506 sur iPhone 390 x 844, 216 x 480 sur Android 360 x 800, 506 x 234 en paysage), l'écran du jeu est calé pile sur les pixels physiques. Vérifié par mesure des aplats sur capture en pleine résolution : uniquement des multiples de 5 (ou 4, ou 6). Écran inhabituel (densité 1) : ancien calcul.
+- Tablette et ordinateur : échelle entière aussi quand l'écran du jeu y perd au plus 12 % de sa taille (ordinateur 1280 x 800 densité 2 : 768 x 672 au lieu de 832 x 728 ; tablette 1024 x 768 : 512 x 448).
+- Lignes de balayage alignées sur les lignes de pixels du jeu (plus de moiré).
+- Sol : bandes fondues dans leur couleur moyenne là où elles font moins de 2 pixels (plus de scintillement à l'horizon).
+- Score collé chiffre par chiffre depuis le cache ; sol envoyé en premier ; décor construit une seule fois au démarrage sur téléphone.
+
+**Vérifié** : téléphone portrait et paysage, Android densité 2,625, tablette, ordinateur (captures, aucune erreur) ; coût 3,1 ms par image pour 9 % de pixels en plus ; mission 1 gagnée par un robot sur écran simulé à 60, 90 et 120 Hz.
+
+**Pas testable ici** : un vrai téléphone (Safari iOS, Chrome Android). À essayer sur le téléphone de Teddy avant de pousser.

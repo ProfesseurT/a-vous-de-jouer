@@ -32,7 +32,7 @@ body{margin:0;background:var(--ink);color:var(--text);font-family:var(--body);ov
   box-shadow:0 0 0 2px rgba(255,61,139,.45),0 0 42px rgba(255,61,139,.32),0 24px 60px rgba(0,0,0,.55)}
 #c{display:block;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges}
 #screen::after{content:"";position:absolute;inset:0;pointer-events:none;
-  background:repeating-linear-gradient(to bottom,rgba(0,0,0,0) 0 2px,rgba(0,0,0,.13) 2px 3px)}
+  background:repeating-linear-gradient(to bottom,rgba(0,0,0,0) 0 calc(var(--px,3px) - var(--line,1px)),rgba(0,0,0,.13) calc(var(--px,3px) - var(--line,1px)) var(--px,3px))}
 .pad{display:none;gap:8px;min-width:0}
 .coarse #app{grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);grid-template-rows:1fr auto;grid-template-areas:"stage stage" "padl padr"}
 .coarse .pad{display:grid}
@@ -43,6 +43,7 @@ body{margin:0;background:var(--ink);color:var(--text);font-family:var(--body);ov
   padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px);background:var(--ink)}
 .phone .pad,.phone #brand{display:none!important}
 .phone #screen{border-radius:0;box-shadow:none}
+.phone #stage{align-items:flex-start;justify-content:flex-start}
 .coarse.landscape #pad-l,.coarse.landscape #pad-r{width:clamp(150px,22vw,230px);align-self:end}
 .pbtn{font:700 10px/1.1 var(--body);letter-spacing:.02em;min-width:0;overflow:hidden;color:var(--text);background:var(--deep);
   border:2px solid rgba(255,122,176,.35);border-radius:10px;min-height:44px;padding:6px 4px;touch-action:none;
@@ -847,9 +848,9 @@ let SCENE = 'sunset';
 function setRes(w, h){
   if (w === W && h === H) return;
   W = w; H = h; canvas.width = W; canvas.height = H; ctx.imageSmoothingEnabled = false;
-  if (H <= 260){ HZ = Math.round(H * 0.375); CAM = (H * 0.61 - HZ) * PZ / FOC; }
+  if (H <= 300){ HZ = Math.round(H * 0.375); CAM = (H * 0.61 - HZ) * PZ / FOC; }
   else { HZ = Math.round(H * 0.32); CAM = (H * 0.665 - HZ) * PZ / FOC; }
-  ZB = FOC * CAM / (H - HZ); ZPL = H > 260 ? 50 : 32;
+  ZB = FOC * CAM / (H - HZ); ZPL = H > 300 ? 50 : 32;
   buildScene(SCENE);
 }
 function buildScene(name){
@@ -909,7 +910,9 @@ function buildScene(name){
   const gn = hex2rgb(PAL.gNear), gn2 = hex2rgb(PAL.gNear2), gf = hex2rgb(PAL.gFar), tr = hex2rgb(PAL.track), fr = hex2rgb('#f2ecff');
   for (let y = HZ + 1; y < H; y++){
     const Z = FOC * CAM / (y - HZ), f = Math.pow(clamp((Z - 3) / 70, 0, 1), 0.55), a = mixRGB(gn, gf, f);
-    GZ[y] = Z; GA[y] = u32(a); GB[y] = u32(mixRGB(gn2, gf, f)); GT[y] = u32(mixRGB(tr, gf, f * 0.9)); GF[y] = u32(mixRGB(a, fr, 0.5));
+    // largeur d'une bande à cette ligne, en pixels : sous 2 pixels, les bandes scintillent en défilant, on les fond dans leur couleur moyenne
+    const b = mixRGB(gn2, gf, f), band = 2.6 * (y - HZ) * (y - HZ) / (FOC * CAM), m = clamp((band - 1.5) / 2.5, 0, 1), avg = mixRGB(a, b, 0.5);
+    GZ[y] = Z; GA[y] = u32(mixRGB(avg, a, m)); GB[y] = u32(mixRGB(avg, b, m)); GT[y] = u32(mixRGB(tr, gf, f * 0.9)); GF[y] = u32(mixRGB(a, fr, 0.5));
   }
   warmPlants();
 }
@@ -1041,7 +1044,7 @@ const BOSSES = [
 ];
 const G = {
   state:'title', rt:0, cover:false, dirty:true, mi:0, dist:0, speed:8, camX:0, phase:'run', doneT:0,
-  p:{ lane:2, x:0, hopFrom:0, hopTo:0, hopT:1, hopY:0, jy:0, vy:0, inv:0, run:0, queued:0, tractor:0, flash:0 },
+  p:{ lane:2, x:0, hopFrom:0, hopTo:0, hopT:1, hopY:0, jy:0, vy:0, jt:0, inv:0, run:0, queued:0, tractor:0, flash:0 },
   serenite:5, stars:0, starT:0, killStar:0, score:0, startScore:0, startBombs:0, combo:0, comboT:0,
   weapons:[true, false, false], weapon:0, bombOk:false, bombs:0, fireT:0,
   ents:[], shots:[], parts:[], floats:[], boss:null, nextSpawn:0, script:[],
@@ -1055,7 +1058,7 @@ function setWeapons(mi){
   G.bombOk = mi >= 2;
   if (!G.weapons[G.weapon]) G.weapon = 0;
 }
-function resetPlayer(){ Object.assign(G.p, { lane:2, x:0, hopFrom:0, hopTo:0, hopT:1, hopY:0, jy:0, vy:0, inv:0, queued:0, tractor:0, flash:0 }); G.camX = 0; }
+function resetPlayer(){ Object.assign(G.p, { lane:2, x:0, hopFrom:0, hopTo:0, hopT:1, hopY:0, jy:0, vy:0, jt:0, inv:0, queued:0, tractor:0, flash:0 }); G.camX = 0; }
 function startMission(mi){
   const m = MISSIONS[mi];
   G.mi = mi; G.state = 'play'; G.phase = 'run'; G.dist = 0; G.speed = m.speed[0];
@@ -1175,7 +1178,7 @@ function hop(dir){
   if (nl < 0 || nl > 4){ G.shake = Math.max(G.shake, 2); return; }
   p.hopFrom = p.x; p.lane = nl; p.hopTo = LANE_X(nl); p.hopT = 0; SND.fx('hop');
 }
-function jump(){ const p = G.p; if (p.jy <= 0.001 && p.vy === 0){ p.vy = 7.1; SND.fx('jump'); } }
+function jump(){ const p = G.p; if (p.jy <= 0.001 && p.vy === 0){ p.vy = 7.1; p.jt = 0; SND.fx('jump'); } }
 function useBomb(){
   if (G.state !== 'play' || !G.bombOk) return;
   if (G.bombs <= 0){ tipOnce('nobomb', 'PLUS DE {w}BUREAU{/} : RAMASSEZ LES ICÔNES DE BUREAU.'); return; }
@@ -1283,7 +1286,7 @@ function bossAttack(kind){
 function updateBoss(dt){
   const b = G.boss; b.t += dt; if (b.flash > 0) b.flash -= dt;
   if (b.dying > 0){
-    b.dying -= dt; if (Math.random() < 0.5) burst(b.x + rand(-2, 2), G.dist + b.zr, rand(0.5, 5), ['#fff', '#f6ead8', FAM[b.fam].c, '#ffe27a'], 6, 3);
+    b.dying -= dt; if (Math.random() < dt * 30) burst(b.x + rand(-2, 2), G.dist + b.zr, rand(0.5, 5), ['#fff', '#f6ead8', FAM[b.fam].c, '#ffe27a'], 6, 3);
     if (b.dying <= 0){ G.boss = null; missionDone(); }
     return;
   }
@@ -1322,9 +1325,11 @@ function updatePlayer(dt){
     p.x = lerp(p.hopFrom, p.hopTo, 1 - Math.pow(1 - p.hopT, 2)); p.hopY = Math.sin(Math.PI * p.hopT) * 1.35;
     if (p.hopT >= 1){ p.x = p.hopTo; p.hopY = 0; if (p.queued){ const q = p.queued; p.queued = 0; hop(q); } }
   }
-  if (p.vy !== 0 || p.jy > 0){ p.jy += p.vy * dt; p.vy -= 20 * dt; if (p.jy <= 0){ p.jy = 0; p.vy = 0; } }
+  // saut : trajectoire calculée d'après le temps écoulé, la même quelle que soit la cadence de l'écran
+  // (exactement celle de l'ancien calcul à 60 images/s : hauteur et fenêtres de saut inchangées)
+  if (p.vy !== 0){ p.jt += dt; p.jy = (p.vy + 1 / 6) * p.jt - 10 * p.jt * p.jt; if (p.jy <= 0){ p.jy = 0; p.vy = 0; } }
   if (p.inv > 0) p.inv -= dt; if (p.flash > 0) p.flash -= dt;
-  if (p.tractor > 0){ p.tractor -= dt; if (Math.random() < 0.4) G.parts.push({ x:p.x + 0.5, wz:G.dist + PZ - 0.2, y:2.3, vx:rand(-0.2, 0.2), vy:1.2, vz:-1, col:'#8a7aa8', t:0.6, s:2 }); }
+  if (p.tractor > 0){ p.tractor -= dt; if (Math.random() < dt * 24) G.parts.push({ x:p.x + 0.5, wz:G.dist + PZ - 0.2, y:2.3, vx:rand(-0.2, 0.2), vy:1.2, vz:-1, col:'#8a7aa8', t:0.6, s:2 }); }
   p.run += dt * G.speed * 0.95;
   G.camX = lerp(G.camX, p.x * 0.8, 1 - Math.exp(-7 * dt));
 }
@@ -1560,6 +1565,15 @@ function drawWorld(){
   for (const f of G.floats){ const Z = f.wz - G.dist; if (Z < 1.5) continue; proj(f.x, f.y, Z); text(f.txt, PX, Math.round(PY), { align:'center', font:3, color:f.col }); }
 }
 const scoreStr = () => String(Math.max(0, Math.floor(G.score))).padStart(8, '0') + '€';
+// Score collé chiffre par chiffre depuis le cache des textes (11 petites images en tout) :
+// aucune nouvelle image n'est fabriquée quand le score change, rien à ramasser pour la mémoire.
+const SCORE_O = { color:'#ffb27a' }; let scoreV = -1, scoreS = '', scoreW = 0;
+function drawScore(xr, y){
+  const v = Math.max(0, Math.floor(G.score));
+  if (v !== scoreV){ scoreV = v; scoreS = scoreStr(); scoreW = -1; for (const ch of scoreS) scoreW += charAdv(ch, 5); }
+  let x = xr - scoreW;
+  for (const ch of scoreS){ text(ch, x, y, SCORE_O); x += charAdv(ch, 5); }
+}
 function drawHUD(){
   if (G.state === 'title' || G.state === 'brief') return;
   const m = MISSIONS[G.mi];
@@ -1577,7 +1591,7 @@ function drawHUD(){
   ctx.drawImage(ICON['w' + G.weapon], wx + 2, wy + 2);
   if (G.bombOk) for (let i = 0; i < G.bombs; i++){ ctx.fillStyle = P.ink; ctx.fillRect(wx - 12, wy + i * 8, 10, 7); ctx.drawImage(ICON.bombMini, wx - 11, wy + 1 + i * 8); }
   text(WEAPONS[G.weapon].short, W - 6, wy + 29, { align:'right', font:3, color:wc });
-  text(scoreStr(), W - 6, wy + 38, { align:'right', color:'#ffb27a' });
+  drawScore(W - 6, wy + 38);
   for (let i = 0; i < 5; i++){
     const on = i < G.stars, fl = G.starFlash > 0 && Math.floor(G.rt * 10) % 2;
     ctx.drawImage(on ? (fl ? ICON.starW : ICON.star) : ICON.starOff, W - 6 - 8 * (5 - i) + 1, wy + 48);
@@ -1618,7 +1632,8 @@ function render(){
   const sh = G.shake > 0 ? G.shake : 0;
   const ox = sh ? Math.round(rand(-sh, sh) * 0.5) : 0, oy = sh ? Math.round(rand(-sh, sh) * 0.5) : 0;
   ctx.save(); ctx.translate(ox, oy);
-  drawSky(); drawGround(ox, oy); drawSlam(); drawFarRows(); drawWorld();
+  // sol d'abord : l'envoi de ses pixels n'attend aucun dessin en cours
+  drawGround(ox, oy); drawSky(); drawSlam(); drawFarRows(); drawWorld();
   ctx.restore();
   drawHUD();
   if (G.flash > 0){ ctx.globalAlpha = Math.min(0.75, G.flash * 1.6); ctx.fillStyle = G.flashCol; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; }
@@ -1825,44 +1840,74 @@ function fit(){
   root.classList.toggle('coarse', coarse); root.classList.toggle('phone', phone);
   root.classList.toggle('landscape', innerWidth > innerHeight * 1.15);
   if (phone){
-    const r = $('stage').getBoundingClientRect(), rw = Math.max(1, r.width), rh = Math.max(1, r.height);
+    // Chaque pixel du jeu couvre un nombre entier de pixels physiques de l'écran (5 x 5 sur un iPhone, par exemple) :
+    // tous les pixels ont la même taille, l'image ne « tremble » plus en défilant. Le petit côté garde environ 224 pixels de jeu.
+    const r = $('stage').getBoundingClientRect(), rw = Math.max(1, r.width), rh = Math.max(1, r.height), dpr = window.devicePixelRatio || 1;
+    const dw = Math.round(rw * dpr), dh = Math.round(rh * dpr), k = Math.max(1, Math.round(Math.min(dw, dh) / 224));
+    const gw = Math.floor(dw / k), gh = Math.floor(dh / k), sh = Math.min(gw, gh), lg = Math.max(gw, gh);
+    if (sh >= 200 && sh <= 280 && lg <= 560){
+      setRes(gw, gh);
+      // décalage pour centrer, ramené à une position que le navigateur sait placer pile sur un pixel physique (1/64 de px CSS)
+      const snap = (o, free) => { for (let q = Math.round(o * dpr + free / 2); q >= Math.ceil(o * dpr - 1e-6); q--){ const c = Math.round(q / dpr * 64) / 64; if (Math.abs(c * dpr - q) < 0.01) return c - o; } return 0; };
+      const sc = $('screen'), ox = snap(r.left, dw - W * k), oy = snap(r.top, dh - H * k);
+      sc.style.width = (W * k / dpr) + 'px'; sc.style.height = (H * k / dpr) + 'px'; sc.style.margin = oy + 'px 0 0 ' + ox + 'px'; // centré, calé sur les pixels physiques
+      scanlines(k, dpr);
+      return;
+    }
+    // écran inhabituel (densité 1, par exemple) : ancien calcul, au plus près
     if (rw < rh) setRes(224, clamp(Math.round(224 * rh / rw), 224, 540)); else setRes(clamp(Math.round(224 * rw / rh), 256, 540), 224);
     const s = Math.min(rw / W, rh / H);
-    $('screen').style.width = Math.round(W * s) + 'px'; $('screen').style.height = Math.round(H * s) + 'px';
+    const fw = Math.round(W * s), fh = Math.round(H * s);
+    $('screen').style.width = fw + 'px'; $('screen').style.height = fh + 'px';
+    scanlines(0); $('screen').style.margin = (rh - fh) / 2 + 'px 0 0 ' + (rw - fw) / 2 + 'px';
     return;
   }
-  setRes(256, 224);
+  setRes(256, 224); $('screen').style.margin = '';
   const br = $('brand'); br.classList.add('room');
   let r = $('stage').getBoundingClientRect(), bh = br.offsetHeight ? br.offsetHeight + 14 : 0;
   if (bh && (r.height - bh) / H < r.width / W){ br.classList.remove('room'); bh = 0; }
   let s = Math.min(r.width / W, (r.height - bh) / H); if (s >= 2) s = Math.floor(s * 4) / 4;
   s = Math.max(0.5, s);
+  // tablette, ordinateur : même principe que le téléphone (pixels du jeu = nombre entier de pixels de l'écran)
+  // si l'écran du jeu n'y perd pas plus de 12 % de sa taille
+  const dpr = window.devicePixelRatio || 1, k = Math.floor(s * dpr + 1e-6);
+  if (k >= 2 && k / (s * dpr) >= 0.88){ s = k / dpr; scanlines(k, dpr); $('screen').style.width = W * s + 'px'; $('screen').style.height = H * s + 'px'; return; }
+  scanlines(0);
   $('screen').style.width = Math.floor(W * s) + 'px'; $('screen').style.height = Math.floor(H * s) + 'px';
+}
+// lignes de balayage alignées sur les lignes de pixels du jeu (une ligne sombre d'un tiers de pixel de jeu environ)
+function scanlines(k, dpr){
+  const st = $('screen').style;
+  if (!k){ st.removeProperty('--px'); st.removeProperty('--line'); return; }
+  st.setProperty('--px', k / dpr + 'px'); st.setProperty('--line', Math.max(1, Math.round(k / 3)) / dpr + 'px');
 }
 function fitAll(){ fit(); renderHelp(); }
 window.addEventListener('resize', fitAll); window.addEventListener('orientationchange', () => setTimeout(fitAll, 150));
 document.addEventListener('fullscreenchange', () => setTimeout(fitAll, 60));
 function goFullscreen(){ const el = document.documentElement; try { if (G.phone && el.requestFullscreen && !document.fullscreenElement) el.requestFullscreen({ navigationUI:'hide' }).catch(() => {}); } catch(e){} }
 
-/* ---------- boucle ---------- */
-let last = performance.now(), acc = 0; const STEP = 1 / 60;
+/* ---------- boucle ----------
+   Un pas de simulation par image affichée, de la durée réelle de cette image : le mouvement suit la cadence de l'écran
+   (60, 90 ou 120 Hz) sans image répétée ni saut. Une image plus longue que 1/60 s est découpée en pas égaux. */
+let last = performance.now(); const STEP = 1 / 60;
 function frame(now){
   requestAnimationFrame(frame);
   let dt = (now - last) / 1000; last = now; if (dt > 0.1) dt = 0.1; if (dt < 0) dt = 0;
   G.rt += dt;
-  if (G.cover){ pollGamepad(); acc = 0; if (G.dirty){ G.dirty = false; render(); } return; } // écran opaque par-dessus : on ne calcule plus rien
-  if (G.state !== 'pause' && G.state !== 'over' && G.state !== 'win'){
-    acc += dt; let n = 0;
-    while (acc >= STEP && n < 6){ pollGamepad(); if (G.state === 'play') play(STEP); else if (G.state === 'title' || G.state === 'brief') attract(STEP); else break; acc -= STEP; n++; }
-  } else { acc = 0; pollGamepad(); }
+  pollGamepad();
+  if (G.cover){ if (G.dirty){ G.dirty = false; render(); } return; } // écran opaque par-dessus : on ne calcule plus rien
+  if (dt > 0 && (G.state === 'play' || G.state === 'title' || G.state === 'brief')){
+    const n = Math.max(1, Math.ceil(dt / STEP - 0.05)), h = dt / n;
+    for (let i = 0; i < n; i++){ if (G.state === 'play') play(h); else if (G.state === 'title' || G.state === 'brief') attract(h); else break; }
+  }
   render();
 }
 
 Object.assign(ICON, makeIcons());
 buildSprites();
 initHeroes();
-buildScene('sunset');
-fitAll(); updatePadUI(); refreshTitle(); fillPromo(); $('app').inert = true;
+fitAll(); if (!BG) buildScene('sunset'); // fitAll construit déjà le décor quand la taille change (téléphone) : pas deux fois au démarrage
+updatePadUI(); refreshTitle(); fillPromo(); $('app').inert = true;
 requestAnimationFrame(frame);
 window.AVDJ = { G, MISSIONS, FAM, startMission, showBrief, startBoss, gameOver, victory, hop, jump, useBomb,
   step(n){ for (let i = 0; i < n; i++){ G.rt += STEP; if (G.state === 'play') play(STEP); else break; } },
