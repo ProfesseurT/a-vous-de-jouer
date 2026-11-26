@@ -200,7 +200,7 @@ textarea.share{width:100%;box-sizing:border-box;min-height:84px;background:var(-
     <p class="eyebrow" id="br-eyebrow">Mission 1 sur 4</p>
     <div class="mission">
       <span class="chip" id="br-date" style="align-self:flex-start">8 décembre 2023</span>
-      <h2 id="br-title">L'étiquette</h2>
+      <h2 id="br-title">La DGCCRF</h2>
       <p class="fact" id="br-fact"></p>
       <div class="unlock" id="br-unlock">
         <img id="br-img" alt="">
@@ -287,7 +287,7 @@ const WEAPONS = [
 ];
 
 const MISSIONS = [
-  { short:"L'ÉTIQUETTE", title:"L'étiquette", date:'8 décembre 2023', pal:'sunset', length:560,
+  { short:'LA DGCCRF', title:'La DGCCRF', date:'8 décembre 2023', pal:'sunset', length:560,
     speed:[8.5, 10.5], gap:[13, 8.5], walls:false, swarm:false,
     mix:[['label',6],['nutri',2],['cerfa',2]],
     fact:"Vins produits depuis le 8 décembre 2023 : liste d'ingrédients et déclaration nutritionnelle obligatoires. Le détail peut passer derrière un QR code, avec « ingrédients » écrit à côté ; valeur énergétique et allergènes restent sur l'étiquette.",
@@ -311,7 +311,7 @@ const MISSIONS = [
     tip:'Factures et TVA en orange : <b style="color:#ffb27a">Vitisoft</b> produit vos factures en Factur-X, transmises par Pennylane, plateforme agréée. Votre journal des ventes, TVA comprise, part tout seul dans le logiciel de votre comptable. Débordé ? Lâchez <b>le bureau</b> {{B}}.',
     radio:'RADIO RANG FM · VENDANGES DE NUIT',
     sms:[["LA COMPTA","Tes factures partent bien en Factur-X ?"],["LE CABINET","Ton journal des ventes est arrivé, TVA comprise."],["SOLUMATIC","Une question ? 02 47 50 38 22"]] },
-  { short:'LE REGISTRE', title:'Le registre phyto', date:'1er janvier 2027', pal:'dawn', length:700,
+  { short:'LA DRAAF', title:'La DRAAF', date:'1er janvier 2027', pal:'dawn', length:700,
     speed:[10, 12], gap:[11.5, 7.5], walls:true, swarm:true,
     mix:[['carnet',4],['stat',2],['classeur',1],['tva',1],['drm',1],['label',1]],
     fact:"Le 1er janvier 2027, le registre phyto passe au format numérique. Le papier reste toléré jusqu'en 2029, à convertir en numérique avant le 31 janvier de l'année suivante. À conserver au moins 5 ans.",
@@ -1041,9 +1041,9 @@ const ET = {
   bureau:{ kind:'pick', spr:'bureau', y:0.6, bob:1 }, tracteur:{ kind:'pick', spr:'tracteurPick', y:0.3, bob:1 },
 };
 const BOSSES = [
-  { name:"L'ÉTIQUETTE GÉANTE", fam:'ETIQ', hp:30, spr:'boss0', atk:['throw','throw','summon'], every:1.45, summon:'label' },
-  { name:'LE TAMPON GAMMA 2', fam:'DOUA', hp:36, spr:'boss1', atk:['slam','throw','slam','summon'], every:1.6, summon:'dae' },
-  { name:'LA PILE DE FACTURES', fam:'FACT', hp:42, spr:'boss2', atk:['swarm','throw','summon'], every:1.55, summon:'xml' },
+  { name:'LA DGCCRF', fam:'ETIQ', hp:30, spr:'boss0', atk:['throw','throw','summon'], every:1.45, summon:'label' },
+  { name:'LES DOUANES', fam:'DOUA', hp:36, spr:'boss1', atk:['slam','throw','slam','summon'], every:1.6, summon:'dae' },
+  { name:'LE FISC', fam:'FACT', hp:42, spr:'boss2', atk:['swarm','throw','summon'], every:1.55, summon:'xml' },
   { name:'LA PAPERASSE', fam:'CYCLE', hp:48, spr:'boss3', atk:['throw','slam','swarm','summon','throw'], every:1.45 },
 ];
 const G = {
@@ -1258,7 +1258,7 @@ function startBoss(){
   G.phase = 'boss';
   G.boss = { def, name:def.name, fam:def.fam === 'CYCLE' ? 'ETIQ' : def.fam, hp:def.hp, max:def.hp, x:0, tl:2, zr:70, y:0, t:0,
     enter:2.4, moveT:1.5, atkT:2.2, ai:0, slam:null, flash:0, dying:0, phaseIdx:0 };
-  G.banner = { text:'BOSS', sub:def.name, t:2.6 };
+  G.banner = { text:def.fam === 'CYCLE' ? 'BOSS FINAL' : 'BOSS', sub:def.name, t:2.6 };
   SND.play('boss');
   tipOnce('boss' + G.mi, G.mi === 3 ? 'LA PAPERASSE CHANGE DE FORME : SUIVEZ SA COULEUR.' : 'VISEZ LE BOSS AVEC LE BON OUTIL. ÉVITEZ SES PAPIERS.', 3.6);
 }

@@ -1,6 +1,6 @@
 # À vous de jouer : le jeu
 
-Petit jeu vidéo 16 bits, subversif, de l'équipe Solumatic. Un vigneron court dans les rangs de vigne et affronte la paperasse avec nos logiciels en guise d'armes. 4 missions : l'étiquette, les douanes, le fisc (TVA et facture électronique), le registre phyto. Il surfe sur la sortie de GTA 6 sans jamais copier GTA : nom, personnages, logo et graphismes sont 100 % originaux.
+Petit jeu vidéo 16 bits, subversif, de l'équipe Solumatic. Un vigneron court dans les rangs de vigne et affronte la paperasse avec nos logiciels en guise d'armes. 4 missions, nommées d'après les méchants : la DGCCRF (l'étiquette), les douanes, le fisc (TVA et facture électronique), la DRAAF (le registre phyto). Boss final : la paperasse. Il surfe sur la sortie de GTA 6 sans jamais copier GTA : nom, personnages, logo et graphismes sont 100 % originaux.
 
 But business : faire parler de la prévente du registre phyto et amener des vignerons vers la page de préinscription (`?source=jeu-a-vous-de-jouer`).
 

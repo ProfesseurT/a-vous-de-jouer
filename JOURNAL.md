@@ -150,3 +150,13 @@ Demande : pouvoir sauter par-dessus les barrières NORME, tout en gardant le tro
 - Textes : aide (« Sautez par-dessus (bonus) ou passez par le trou ») et indice de la mission 2.
 
 Test par robot (8 à 15 barrières par cas) : saut précis 100 % franchies, saut approximatif 75 %, trop tôt 13 %, trop tard 0 %. L'équilibre des missions ne change pas pour un joueur qui prend le trou.
+
+## 26/11/2026 · Noms des méchants alignés sur le rollup de Teddy
+
+Demande : changer le nom des méchants, comme sur le rollup (« 4 missions, 3 armes » : la DGCCRF, les douanes, le fisc, la DRAAF ; boss final : la paperasse).
+
+- Missions : « L'étiquette » devient « La DGCCRF », « Le registre phyto » devient « La DRAAF ». Les douanes et le fisc ne changent pas. La date et la fiche de chaque mission ne changent pas : elles expliquent toujours l'obligation.
+- Boss : la DGCCRF (au lieu de l'étiquette géante), les douanes (au lieu du tampon GAMMA 2), le fisc (au lieu de la pile de factures). La paperasse reste le boss de la mission 4, annoncée « BOSS FINAL ».
+- Inchangés : noms des petits ennemis (étiquette, DRM, DAE, TVA, carnet...), texte de partage et description de la page (« étiquetage, douanes, fisc, registre phyto »), image d'aperçu.
+
+Vérifié : fiche de mission 1, HUD et bandeau du boss final (navigateur, 390 x 844), aucune erreur console.
