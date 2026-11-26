@@ -1781,6 +1781,8 @@ function pollGamepad(){
   const ax = gp.axes[0] || 0, ay = gp.axes[1] || 0;
   const st = { left:ax < -0.5 || (gp.buttons[14] && gp.buttons[14].pressed), right:ax > 0.5 || (gp.buttons[15] && gp.buttons[15].pressed),
     jump:(gp.buttons[0] && gp.buttons[0].pressed) || ay < -0.6 || (gp.buttons[12] && gp.buttons[12].pressed), bomb:(gp.buttons[1] && gp.buttons[1].pressed) || (gp.buttons[13] && gp.buttons[13].pressed), start:gp.buttons[9] && gp.buttons[9].pressed };
+  // fenêtre extérieure ouverte par-dessus le jeu (consentement aux cookies, version en ligne seulement) : la manette ne fait rien
+  if (document.body.classList.contains('cc-lock')){ padPrev = st; return; }
   for (const k in st){ if (st[k] && !padPrev[k]){ if (k === 'start'){ if (G.state === 'play') pause(); else if (G.state === 'pause') resume(); else { const b = document.querySelector('.ov:not([hidden]) button.btn-main') || document.querySelector('.ov:not([hidden]) button'); if (b) b.click(); } } else onAction(k); } }
   padPrev = st;
 }

@@ -193,3 +193,34 @@ Demande de Teddy : « améliorer le jeu en version mobile afin qu'il soit plus l
 **Vérifié** : téléphone portrait et paysage, Android densité 2,625, tablette, ordinateur (captures, aucune erreur) ; coût 3,1 ms par image pour 9 % de pixels en plus ; mission 1 gagnée par un robot sur écran simulé à 60, 90 et 120 Hz.
 
 **Pas testable ici** : un vrai téléphone (Safari iOS, Chrome Android). À essayer sur le téléphone de Teddy avant de pousser.
+
+## 26/11/2026 · Pixel Meta derrière une fenêtre de consentement (version en ligne seulement)
+
+Demande de Teddy : le pixel Meta dans le jeu, derrière la même fenêtre de consentement que les 2 landing pages de prévente (référence : `bureau-du-vigneron/monetisation/phytos/2026-11_meta-ads/consentement-pixel-meta.html`), uniquement sur GitHub Pages.
+
+**Fait**
+- `src/consentement.html` : fenêtre, style et script à part. Le build l'injecte à la fin de `index.html`, après le script du jeu. `dist/jeu.html` (Artifact) n'y a jamais droit : le build refuse de produire un Artifact qui contiendrait le pixel, et refuse aussi un deuxième `<style>` ou `<script>` dans une source (il serait perdu sans bruit).
+- Même pixel (2162686380997506), même contact (teddy@solumatic.fr), choix gardé 6 mois, Refuser et Accepter de même taille et même style (vérifié par mesure : 149 x 52 px sur téléphone, 200 x 52 px ailleurs, gras 700, 17 px, mêmes couleurs). Rien n'est chargé ni déposé avant « Accepter ». Adresse nettoyée comme sur les LP (seuls `source`, `utm_*` et `fbclid` restent).
+- Actif seulement sur professeurt.github.io (et localhost pour les tests), et seulement avant le 1er janvier 2027 0 h heure de Paris (même date que `PREVENTE_FIN`). Ensuite : ni fenêtre, ni pixel, ni bouton « Cookies », et les cookies laissés par un accord passé sont effacés.
+- Événements après accord : PageView et ViewContent (`content_name` « Jeu a vous de jouer », pour distinguer le jeu des LP dans le gestionnaire d'événements). Pas d'InitiateCheckout.
+- Habillage du jeu : nuit violette, liseré rose, ombre orange, Poppins (titre noir italique). Lisible du téléphone (y compris en paysage : la fenêtre défile quand les détails sont dépliés) à l'ordinateur.
+- Tant que la fenêtre est ouverte, le jeu ne réagit à rien : le reste de la page est inerte, le clavier est intercepté avant le jeu, la manette est ignorée (`body.cc-lock`, seule ligne ajoutée dans `src/jeu.html`), le son ne démarre pas. Échap ne ferme la fenêtre que si un choix existe déjà (fenêtre rouverte) ; à la première visite, il faut choisir. Le choix fait, le focus revient sur « Jouer » (ou sur le bouton « Cookies » qui a rouvert la fenêtre).
+- Revenir sur son choix : petit bouton « Cookies » sur l'accueil (après « Par l'équipe Solumatic... » ; seul sur sa ligne sur téléphone) et dans la pause. Refuser après avoir accepté efface `_fbp` et `_fbc` sur l'adresse exacte (professeurt.github.io, avec et sans point ; github.io est un suffixe public) et recharge la page.
+- Choix rangé sous `avdj_meta_consent` (pas la clé des LP : toutes les pages de professeurt.github.io partagent le même stockage).
+
+**Deux phrases adaptées, à valider par Teddy** (règle de vérité : les textes des LP seraient faux dans le jeu)
+- « Quoi » : « un identifiant de navigateur (cookies _fbp et _fbc, 90 jours) et les pages vues ici ». Retiré : « et le clic sur « Réserver mon tarif » », que le jeu ne suit pas.
+- « Vos droits » : « avec le bouton « Cookies » de l'accueil ou de la pause » au lieu de « avec le lien « Cookies » en bas de page ».
+
+**Vérifié** (Chrome, script Playwright, 214 contrôles, deux passages complets sans échec) sur téléphone 390 x 844, tablette 1024 x 768 et ordinateur 1280 x 800, le site servi sous sa vraie adresse (professeurt.github.io) depuis les fichiers locaux :
+- avant le choix : aucune requête vers Facebook, aucun cookie `_fbp` ou `_fbc` ; fenêtre devant tout (z-index 1000) ; touches, clics, gestes, manette sans effet sur le jeu, aucun son créé ;
+- après Refuser : rien ne part, ni sur le moment ni à la visite suivante ; après Accepter : PageView et ViewContent partent vers facebook.com/tr avec le bon numéro de pixel, `_fbp` posé sur `.professeurt.github.io` ; accord depuis la pause : la partie attend puis reprend ;
+- Refuser après Accepter : cookies effacés, page rechargée, plus aucune requête Facebook ;
+- partie lancée et jouée normalement après chacun des deux choix (la course avance, changement de rang, son) ;
+- choix de plus de 6 mois : la fenêtre revient ; 31/12/2026 23 h 59 : fenêtre active ; 1er janvier 2027 0 h : rien, cookie d'un ancien accord effacé ;
+- autre adresse : ni fenêtre ni bouton ; `dist/jeu.html` : le jeu tourne, sans fenêtre ni pixel ;
+- aucune erreur console. Téléphone en paysage 844 x 390 regardé aussi.
+
+Pendant les tests, les envois vers facebook.com ont été interceptés dans le navigateur de test : aucun faux événement n'est arrivé chez Meta. À savoir pour la suite : le pixel n'envoie rien depuis un navigateur qui se déclare « HeadlessChrome » (filtre anti-robots de Meta).
+
+**Pas testable ici** : la réception réelle des événements dans le gestionnaire d'événements Meta (à regarder après la mise en ligne, en acceptant depuis un vrai téléphone), et Safari iOS (qui limite à 7 jours les cookies posés par un script, `_fbp` compris).

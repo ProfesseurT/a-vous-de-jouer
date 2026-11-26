@@ -1,0 +1,162 @@
+<!-- Consentement + pixel Meta : UNIQUEMENT dans index.html (GitHub Pages), jamais dans dist/jeu.html (Artifact).
+     scripts/build.mjs l'injecte à la fin de <body>, après le script du jeu (l'ordre compte : voir lock()).
+     Repris de bureau-du-vigneron/monetisation/phytos/2026-11_meta-ads/consentement-pixel-meta.html (version du 24/11/2026),
+     habillé aux couleurs du jeu. Deux phrases adaptées au jeu (règle de vérité) : pas de clic « Réserver mon tarif » suivi,
+     et le bouton « Cookies » est sur l'accueil et dans la pause, pas « en bas de page ». -->
+<div class="cc" id="cc" role="dialog" aria-modal="true" aria-labelledby="ccT" aria-describedby="ccD" hidden>
+  <div class="cc-box" tabindex="-1">
+    <p class="cc-t" id="ccT">Avant de continuer</p>
+    <p id="ccD">Avec votre accord, nous utilisons un cookie publicitaire pour mesurer nos annonces et vous rappeler, sur les réseaux sociaux, la fin de la prévente le 31 décembre. Sans accord, rien n'est déposé. <button type="button" class="cc-l" id="ccMore" aria-expanded="false" aria-controls="ccInfo">En savoir plus</button></p>
+    <div class="cc-more" id="ccInfo" hidden>
+      <p><b>Qui&nbsp;:</b> Solumatic SAS (Chambray-lès-Tours), responsable du traitement. Contact pour vos données&nbsp;: <a id="ccMail" href="#"></a>.</p>
+      <p><b>Pourquoi&nbsp;:</b> mesurer nos annonces et les montrer à nouveau aux personnes venues sur cette page, sur Facebook et Instagram. Base légale&nbsp;: votre consentement.</p>
+      <p><b>Quoi&nbsp;:</b> un identifiant de navigateur (cookies _fbp et _fbc, 90 jours) et les pages vues ici. Meta peut les relier à votre compte Facebook ou Instagram.</p>
+      <p><b>Destinataire&nbsp;:</b> Meta Platforms Ireland, qui peut transférer ces données aux États-Unis (Meta Platforms, Inc. adhère au cadre de protection des données UE-États-Unis).</p>
+      <p><b>Vos droits&nbsp;:</b> accès, effacement, opposition, retrait de votre accord à tout moment avec le bouton « Cookies » de l'accueil ou de la pause, réclamation auprès de la CNIL (cnil.fr). Votre choix est gardé 6 mois sur cet appareil.</p>
+    </div>
+    <div class="cc-row"><button type="button" class="cc-b" id="ccNo">Refuser</button><button type="button" class="cc-b" id="ccYes">Accepter</button></div>
+  </div>
+</div>
+<style>
+/* Fenêtre au-dessus de tout (les écrans du jeu sont à z-index 20). Refuser et Accepter : même taille, même style. */
+.cc{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;box-sizing:border-box;
+  padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+  background:rgba(12,3,22,.74);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);touch-action:pan-y}
+.cc .cc-box{width:min(460px,100%);max-height:100%;overflow:auto;overscroll-behavior:contain;box-sizing:border-box;
+  background:linear-gradient(180deg,var(--plum),var(--deep));color:var(--text);border:2px solid var(--pink);border-radius:12px;
+  box-shadow:6px 6px 0 var(--orange),0 0 40px rgba(255,61,139,.35);padding:22px 22px 20px;
+  font:500 15px/1.55 var(--body);text-align:left;-webkit-user-select:text;user-select:text}
+.cc .cc-box:focus{outline:none}
+.cc p{margin:0 0 12px}
+.cc .cc-t{font-family:var(--display);font-weight:900;font-style:italic;text-transform:uppercase;font-size:23px;line-height:1.1;
+  letter-spacing:-.01em;color:#fff;text-shadow:.07em .07em 0 var(--orange);margin-bottom:12px}
+.cc .cc-more{font-size:13px;line-height:1.5;color:var(--lav)}
+.cc .cc-more p{margin:0 0 8px}
+.cc .cc-more b{font-weight:700;color:#fff}
+.cc a{color:var(--pink-soft)}
+.cc .cc-row{display:flex;gap:12px;margin-top:18px}
+.cc .cc-b{-webkit-appearance:none;appearance:none;flex:1 1 0;min-width:0;min-height:52px;margin:0;padding:10px;
+  font:700 17px/1.2 var(--body);color:#fff;background:var(--badge);border:2px solid var(--pink-soft);border-radius:8px;cursor:pointer}
+.cc .cc-b:hover{background:#4a1a5e}
+.cc .cc-b:active{transform:translateY(1px)}
+.cc .cc-l,.cc-open{-webkit-appearance:none;appearance:none;background:none;border:0;font:inherit;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.cc .cc-l{padding:0;font-weight:700;color:var(--pink-soft)}
+/* Petit bouton « Cookies » (accueil, pause) : texte discret, zone de toucher agrandie sans décaler la mise en page */
+.cc-open{display:inline-block;margin:-10px -6px;padding:10px 6px;color:var(--lav)}
+.cc-open:hover{color:#fff}
+.cc-wrap{white-space:nowrap}
+/* téléphone : « Cookies » seul sur sa ligne, sous le crédit (pas de point qui pend en bout de ligne) */
+.phone .cc-wrap{display:block}
+.phone .cc-sep{display:none}
+.cc .cc-b:focus-visible,.cc .cc-l:focus-visible,.cc a:focus-visible,.cc-open:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+@media (max-height:500px){.cc .cc-box{padding:14px 16px;font-size:14px}.cc .cc-t{font-size:19px;margin-bottom:8px}.cc .cc-row{margin-top:12px}.cc .cc-b{min-height:44px}}
+</style>
+<script>
+/* Consentement + pixel Meta. Rien n'est chargé ni déposé avant « Accepter ».
+   Actif seulement sur professeurt.github.io (et localhost pour les tests), et seulement pendant la prévente :
+   à partir du 1er janvier 2027 0 h (heure de Paris, même date que PREVENTE_FIN dans le jeu), ni fenêtre ni pixel. */
+(function(){
+  'use strict';
+  var PIXEL_ID = '2162686380997506';   // numéro du pixel Meta (le même que sur les 2 landing pages de prévente)
+  var CONTACT = 'teddy@solumatic.fr';  // email pour les questions de données personnelles
+  var FIN = Date.UTC(2026, 11, 31, 23, 0, 0); // 1er janvier 2027, 0 h, heure de Paris
+  var HOTES = /^(professeurt\.github\.io|localhost|127\.0\.0\.1)$/;
+  var KEY = 'avdj_meta_consent', VERSION = '2026-11-26', MAX = 182 * 864e5; // choix gardé 6 mois
+  var box = document.getElementById('cc');
+  if (!box) return;
+  var live = function(){ return Date.now() < FIN; };
+
+  function read(){ try { var v = JSON.parse(localStorage.getItem(KEY)); if (v && v.v === VERSION && (Date.now() - v.t) < MAX) return v.c; } catch(e){} return null; }
+  function save(c){ try { localStorage.setItem(KEY, JSON.stringify({ c:c, t:Date.now(), v:VERSION })); } catch(e){} }
+  // github.io est un suffixe public : les cookies sont posés sur l'adresse exacte (professeurt.github.io), pas sur github.io.
+  function forget(){
+    var h = location.hostname;
+    ['_fbp', '_fbc'].forEach(function(n){
+      ['; domain=' + h, '; domain=.' + h, ''].forEach(function(d){ document.cookie = n + '=; Max-Age=0; path=/' + d; });
+    });
+  }
+
+  if (!HOTES.test(location.hostname)){ box.remove(); return; }
+  if (!live()){
+    // Après la prévente : plus de fenêtre ni de pixel. On efface ce qu'un accord passé avait laissé.
+    box.remove();
+    try { if (localStorage.getItem(KEY) !== null){ forget(); localStorage.removeItem(KEY); } } catch(e){}
+    return;
+  }
+
+  // On ne garde dans l'adresse que source, utm_* et fbclid : aucune autre donnée ne part chez Meta.
+  try { var u = new URL(location.href), x = []; u.searchParams.forEach(function(v, n){ if (!/^(source|utm_[a-z_]+|fbclid)$/i.test(n)) x.push(n); }); if (x.length){ x.forEach(function(n){ u.searchParams.delete(n); }); history.replaceState(null, '', u.pathname + u.search + u.hash); } } catch(e){}
+
+  var panel = box.querySelector('.cc-box'), info = document.getElementById('ccInfo'), more = document.getElementById('ccMore');
+  var loaded = false, opener = null, saved = [];
+  var m = document.getElementById('ccMail'); m.textContent = CONTACT; m.href = 'mailto:' + CONTACT;
+
+  // Tant que la fenêtre est ouverte, le reste de la page est inerte (ni clic, ni focus) ;
+  // body.cc-lock dit au jeu d'ignorer la manette. Ce script passe après celui du jeu : l'état « inert » relevé est le bon.
+  function lock(on){
+    if (on){ saved = []; [].forEach.call(document.body.children, function(el){ if (el !== box && el.tagName !== 'SCRIPT'){ saved.push([el, el.inert]); el.inert = true; } }); }
+    else { saved.forEach(function(s){ s[0].inert = s[1]; }); saved = []; }
+    document.body.classList.toggle('cc-lock', on);
+  }
+  function open(){
+    if (!box.hidden || !live()) return;
+    info.hidden = true; more.setAttribute('aria-expanded', 'false');
+    box.hidden = false; lock(true); panel.scrollTop = 0;
+    try { panel.focus({ preventScroll:true }); } catch(e){}
+  }
+  function close(){
+    box.hidden = true; lock(false);
+    // le focus revient au bouton « Cookies », ou au bouton principal de l'écran du jeu (« Jouer » sur l'accueil)
+    var f = opener || document.querySelector('.ov:not([hidden]) .btn-main'); opener = null;
+    if (f){ try { f.focus({ preventScroll:true }); } catch(e){} }
+  }
+
+  // Clavier : le jeu écoute sur window ; on intercepte avant lui (phase de capture) tant que la fenêtre est ouverte.
+  function guard(ev){
+    if (box.hidden) return;
+    ev.stopPropagation();
+    if (ev.type !== 'keydown') return;
+    if (ev.key === 'Escape'){ ev.preventDefault(); if (read() !== null) close(); return; } // Échap ferme seulement si un choix existe déjà
+    if (ev.key !== 'Tab') return;
+    var f = [].slice.call(box.querySelectorAll('button,a[href]')).filter(function(el){ return el.offsetParent !== null; });
+    if (!f.length) return;
+    var a = f[0], z = f[f.length - 1], i = f.indexOf(document.activeElement);
+    if (i < 0){ ev.preventDefault(); (ev.shiftKey ? z : a).focus(); }
+    else if (ev.shiftKey && i === 0){ ev.preventDefault(); z.focus(); }
+    else if (!ev.shiftKey && i === f.length - 1){ ev.preventDefault(); a.focus(); }
+  }
+  window.addEventListener('keydown', guard, true);
+  window.addEventListener('keyup', guard, true);
+
+  function load(){
+    if (loaded || !live()) return; loaded = true;
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    window.fbq('set', 'autoConfig', false, PIXEL_ID);
+    window.fbq('init', PIXEL_ID);
+    window.fbq('track', 'PageView');
+    window.fbq('track', 'ViewContent', { content_name:'Jeu a vous de jouer' });
+    // Pas d'InitiateCheckout : le jeu ne vend rien, il renvoie vers la landing page.
+  }
+
+  document.getElementById('ccYes').onclick = function(){ save('oui'); close(); load(); };
+  document.getElementById('ccNo').onclick = function(){ var was = read(); save('non'); close(); if (loaded || was === 'oui'){ forget(); location.reload(); } };
+  more.onclick = function(){ info.hidden = !info.hidden; more.setAttribute('aria-expanded', String(!info.hidden)); };
+
+  // Petit bouton « Cookies » : sur l'accueil (après « Par l'équipe Solumatic... ») et dans l'écran Pause.
+  function opnr(){
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'cc-open'; b.textContent = 'Cookies';
+    b.addEventListener('click', function(){ opener = b; open(); });
+    return b;
+  }
+  var cred = document.querySelector('#ov-title .credit');
+  if (cred){
+    var wrap = document.createElement('span'), sep = document.createElement('span');
+    wrap.className = 'cc-wrap'; sep.className = 'cc-sep'; sep.setAttribute('aria-hidden', 'true'); sep.textContent = '· ';
+    wrap.appendChild(sep); wrap.appendChild(opnr()); cred.appendChild(document.createTextNode(' ')); cred.appendChild(wrap);
+  }
+  var row = document.querySelector('#ov-pause .row');
+  if (row){ var p = document.createElement('p'); p.className = 'credit'; p.appendChild(opnr()); row.parentNode.insertBefore(p, row.nextSibling); }
+
+  var c = read(); if (c === 'oui') load(); else if (c === null) open();
+})();
+</script>
